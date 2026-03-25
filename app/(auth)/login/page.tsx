@@ -1,3 +1,5 @@
+"use client";
+
 import { z } from "zod";
 
 // Components
@@ -5,17 +7,17 @@ import Button from "@/app/components/ui/button";
 import Field from "@/app/components/ui/field";
 import ErrorList from "@/app/components/ui/ErrorList";
 import AuthHeader from "@/app/components/AuthHeader";
-import { EmailSchema, PasswordSchema } from "@/app/lib/user-validation";
 import Link from "next/link";
 import Image from "next/image";
 import GoogleLogo from "@/app/assets/icons/google-logo.png";
-
-const LoginSchema = z.object({
-  email: EmailSchema,
-  password: PasswordSchema,
-});
+import { useActionState } from "react";
+import { loginAction } from "@/app/lib/actions/auth";
 
 const Login = () => {
+  const [state, action, isPending] = useActionState(loginAction, {
+    errors: null,
+  });
+
   return (
     <>
       <AuthHeader
@@ -34,27 +36,29 @@ const Login = () => {
         <div className="h-0.5 w-full bg-white" />
       </div>
 
-      <form aria-label="Login Form" className="w-full">
+      <form action={action} aria-label="Login Form" className="w-full">
         <div className="mb-25">
           <Field
+            id="email"
             name="email"
             label="Email"
             type="email"
             placeholder="yourname@example.com"
             className="w-full border"
           />
-          <ErrorList />
+          <ErrorList errors={state.errors?.email} />
         </div>
 
         <div className="mb-25">
           <Field
+            id="password"
             type="password"
             name="password"
             label="Password"
             placeholder="Enter your password"
             className="w-full border"
           />
-          <ErrorList />
+          <ErrorList errors={state.errors?.password} />
         </div>
 
         <Link
@@ -64,7 +68,7 @@ const Login = () => {
           Forgot password?
         </Link>
 
-        <ErrorList />
+        <ErrorList errors={state.errors?.general} />
         <Button className="mt-30 h-[3.125rem] w-full" type="submit">
           Login
         </Button>

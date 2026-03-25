@@ -10,3 +10,8 @@ export const EmailSchema = z
   .min(3, { message: "Email is too short" })
   .max(100, { message: "Email is too long" })
   .transform((value) => value.toLowerCase());
+
+export const LoginSchema = z.object({
+  email: EmailSchema,
+  password: PasswordSchema,
+});
