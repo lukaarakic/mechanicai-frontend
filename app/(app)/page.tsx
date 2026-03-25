@@ -1,10 +1,12 @@
-import Link from "next/link";
+"use client";
+
 import Button from "../components/ui/button";
+import createChatAction from "../lib/actions/create-chat";
 
 const Index = () => {
   return (
-    <div className="mt-30 flex h-full w-full flex-col items-center justify-center md:mt-[15vh] lg:mt-[20vh]">
-      <h1 className="by-the-sea mx-auto mb-25 w-fit text-5xl font-semibold leading-tight md:text-[4rem]">
+    <div className="flex h-full w-full flex-col items-center justify-center">
+      <h1 className="by-the-sea mx-auto mb-25 w-fit text-5xl font-semibold leading-tight md:text-64">
         Hi there, Luka
         <br />
         What would you like to do?
@@ -17,11 +19,12 @@ const Index = () => {
         {/* <HistoryList solutions={solutions} /> */}
       </div>
 
-      <Link href={"/sessions/1"} className="w-full">
-        <Button className="mx-auto py-2 w-full max-w-xl">
-          Create new chat
-        </Button>
-      </Link>
+      <Button
+        className="mx-auto py-2 w-full max-w-xl"
+        onClick={createChatAction}
+      >
+        Create new chat
+      </Button>
     </div>
   );
 };

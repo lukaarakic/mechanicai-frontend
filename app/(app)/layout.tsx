@@ -18,10 +18,10 @@ function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex h-full md:pb-0">
+    <div className="flex md:pb-0 h-svh">
       <Navbar user={user} />
 
-      <main className="h-full w-full md:ml-20 lg:p-0">{children}</main>
+      <main className="h-full w-full ml-20 md:ml-0 lg:p-0">{children}</main>
     </div>
   );
 }

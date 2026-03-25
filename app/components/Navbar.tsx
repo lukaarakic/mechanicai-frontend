@@ -41,16 +41,16 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
   };
 
   return (
-    <nav className="fixed bottom-0 z-50 grid h-[5rem] w-full grid-cols-5 place-items-center items-center rounded-br-7 rounded-tr-7 bg-light-gray shadow-small md:top-0 md:flex md:h-full md:min-h-dvh md:w-[5rem] md:flex-col md:py-10">
+    <nav className="fixed bottom-0 z-50 grid w-full grid-cols-5 place-items-center items-center rounded-br-7 rounded-tr-7 bg-light-gray shadow-small md:top-0 md:flex md:h-full md:min-h-dvh md:w-80 md:flex-col md:py-20">
       <Link href="/">
         <WhiteLogo className={`w-12 h-12`} />
       </Link>
 
-      <div className="hidden h-px my-5 w-full bg-white/20 md:block" />
+      <div className="hidden h-px my-15 w-full bg-white/20 md:block" />
 
       <Link
         href="/sessions/1"
-        className={`border border-white rounded-sm p-2 mb-5 ${
+        className={`border border-white rounded-sm p-2 mb-15 ${
           isActive("/sessions/1") ? "text-blue-800" : "text-white"
         }`}
       >
@@ -59,7 +59,7 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
 
       <Link
         href="/"
-        className={`hidden md:block mb-5 ${isActive("/") ? "text-blue-800" : "text-white"}`}
+        className={`hidden md:block mb-15 ${isActive("/") ? "text-blue-800" : "text-white"}`}
       >
         <HomeIcon className={`fill-current h-7 w-7`} />
       </Link>
@@ -73,17 +73,17 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
 
       <Link
         href="/settings"
-        className={`mb-5 ${isActive("/settings") ? "text-blue-800" : "text-white"}`}
+        className={`mb-15 ${isActive("/settings") ? "text-blue-800" : "text-white"}`}
       >
         <SettingsIcon className={`fill-current h-7 w-7`} />
       </Link>
 
       <Popover
-        containerClassName="z-[60]"
+        containerClassName="z-[60] left-15"
         isOpen={isPopoverOpen}
-        positions={["right", "top", "bottom"]}
+        positions={["right", "bottom"]}
         content={
-          <div className="mr-5 min-w-64 rounded-lg border border-white/25 bg-light-gray p-5 md:mb-10 md:ml-5">
+          <div className="mr-5 min-w-64 rounded-lg border border-white/25 bg-light-gray p-20 md:ml-10 md:mb-20">
             <p className="text-16 font-semibold">
               {user.firstName} {user.lastName}
             </p>
