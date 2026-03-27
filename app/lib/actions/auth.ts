@@ -1,7 +1,7 @@
 "use server";
 
-import z from "zod";
-import { LoginSchema } from "../user-validation";
+import z, { email } from "zod";
+import { LoginSchema, RegisterSchema } from "../user-validation";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -17,8 +17,6 @@ export async function loginAction(
   prevData: LoginState,
   formData: FormData,
 ): Promise<LoginState> {
-  console.log(Object.fromEntries(formData.entries()));
-
   const parsedData = LoginSchema.safeParse(
     Object.fromEntries(formData.entries()),
   );
@@ -26,7 +24,10 @@ export async function loginAction(
   if (!parsedData.success) {
     console.error("Validation failed", parsedData.error);
     return {
-      errors: parsedData.error.flatten().fieldErrors,
+      errors: {
+        ...parsedData.error.flatten().fieldErrors,
+        general: parsedData.error.flatten().formErrors,
+      },
     };
   }
 
@@ -51,6 +52,16 @@ export async function loginAction(
         },
       };
     }
+
+    if (response.status === 403) {
+      return {
+        errors: {
+          general: ["Your email is not verified. Please check your inbox."],
+        },
+      };
+    }
+
+    console.log("Login response", response);
 
     if (!response.ok) {
       throw new Error("Server responded with an error");
@@ -83,4 +94,75 @@ export async function loginAction(
   if (isSuccess) redirect("/");
 
   return { errors: null };
+}
+
+type RegisterState = {
+  errors: {
+    email?: string[];
+    password?: string[];
+    confirmPassword?: string[];
+    general?: string[];
+  } | null;
+  success?: boolean;
+};
+
+export async function registerAction(
+  prevState: RegisterState,
+  formData: FormData,
+): Promise<RegisterState> {
+  const parsedData = RegisterSchema.safeParse(
+    Object.fromEntries(formData.entries()),
+  );
+
+  if (!parsedData.success) {
+    console.error("Validation failed", parsedData.error);
+    return {
+      errors: {
+        ...parsedData.error.flatten().fieldErrors,
+        general: parsedData.error.flatten().formErrors,
+      },
+    };
+  }
+
+  try {
+    const response = await fetch(`${process.env.API_URL}/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: parsedData.data.email,
+        password: parsedData.data.password,
+        "password-confirm": parsedData.data.confirmPassword,
+      }),
+    });
+
+    console.log("Registration response", response);
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Registration failed", errorData);
+      return {
+        errors: {
+          general: [
+            errorData.message || "Registration failed. Please try again.",
+          ],
+        },
+      };
+    }
+
+    console.log("Registration successful", response);
+
+    return {
+      errors: null,
+      success: true,
+    };
+  } catch (err) {
+    console.error("Registration request failed", err);
+    return {
+      errors: {
+        general: ["An unexpected error occurred. Please try again."],
+      },
+    };
+  }
 }
