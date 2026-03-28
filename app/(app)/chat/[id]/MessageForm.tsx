@@ -3,37 +3,48 @@
 import Button from "@/app/components/ui/button";
 import { Textarea } from "@/app/components/ui/textarea";
 import ArrowLeft from "@/app/assets/icons/arrow-left.svg";
-import { useActionState } from "react";
-import sendMessageAction from "@/app/lib/actions/chat";
+import { useRef } from "react";
 
-const MessageForm = ({ sessionId }: { sessionId: string }) => {
-  const initialState = { data: null, error: null };
+const MessageForm = ({
+  chatId,
+  onSend,
+  isPending,
+}: {
+  chatId: string;
+  onSend: (content: string) => void;
+  isPending: boolean;
+}) => {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const [state, action, isPending] = useActionState(
-    sendMessageAction,
-    initialState,
-  );
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const content = textareaRef.current?.value.trim();
+    if (!content || isPending) return;
+    onSend(content);
+    if (textareaRef.current) textareaRef.current.value = "";
+  };
 
   return (
-    <div className="mt-auto sticky bottom-0 py-6">
-      <form action={action} className="relative mx-auto">
+    <div className="sticky bottom-0 pb-6 pt-3 mt-auto bg-black/80 backdrop-blur-sm">
+      <form onSubmit={handleSubmit} className="relative">
         <Textarea
+          ref={textareaRef}
           name="content"
-          placeholder="Describe your car problem..."
-          className="pr-14 py-4 bg-[--color-light-gray] border border-white/10 rounded-xl text-sm text-white placeholder:text-white/30 focus:border-white/20 transition-colors"
+          placeholder="Ask a follow-up question..."
+          className="w-full pr-12 py-3.5 min-h-[52px] bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white placeholder:text-white/25 focus:border-white/20 focus:outline-none transition-colors resize-none"
         />
-        <input type="hidden" name="sessionId" value={sessionId} />
-        <Button className="absolute bottom-2 right-2 h-8 w-8 rounded-lg text-black bg-white hover:bg-white/90 p-0 flex items-center justify-center">
+        <input type="hidden" name="chatId" value={chatId} />
+        <Button
+          disabled={isPending}
+          className="absolute bottom-2.5 right-2.5 h-7 w-7 rounded-lg bg-white hover:bg-white/90 p-0 flex items-center justify-center transition-all active:scale-95 disabled:opacity-40"
+        >
           <ArrowLeft
-            className={`rotate-90 w-12 h-12`}
+            className="rotate-90 w-3.5 h-3.5"
             style={{ fill: "#000" }}
           />
         </Button>
-
-        {state.error && (
-          <p className="text-red-500 text-sm mt-2">{state.error}</p>
-        )}
       </form>
+
       <p className="text-center text-white/20 text-xs mt-3">
         MechanicAI can make mistakes. Always consult a professional.
       </p>

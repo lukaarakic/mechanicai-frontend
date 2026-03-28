@@ -13,7 +13,8 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       const el = innerRef.current;
       if (el) {
         el.style.height = "auto";
-        el.style.height = `${el.scrollHeight}px`;
+        el.style.height = `${Math.min(el.scrollHeight, 160)}px`;
+        el.style.overflowY = el.scrollHeight > 160 ? "auto" : "hidden";
       }
       onChange?.(e);
     };

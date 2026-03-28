@@ -1,9 +1,8 @@
-// app/chat/NewChatForm.tsx
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Button from "@/app/components/ui/button";
+import createChatAction from "@/app/lib/actions/create-chat";
 
 interface Car {
   id: string;
@@ -13,7 +12,6 @@ interface Car {
 }
 
 const NewChatForm = ({ cars }: { cars: Car[] }) => {
-  const router = useRouter();
   const [selectedCarId, setSelectedCarId] = useState(cars[0]?.id ?? "");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -29,19 +27,16 @@ const NewChatForm = ({ cars }: { cars: Car[] }) => {
     setIsPending(true);
     setError("");
 
-    const res = await fetch("/api/v1/chats", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ car_id: selectedCarId, message }),
-    });
-
-    if (res.ok) {
-      const { id } = await res.json();
-      router.push(`/chat/${id}`);
-    } else {
-      setError("Something went wrong. Please try again.");
-      setIsPending(false);
-    }
+    createChatAction(selectedCarId, message)
+      .then(() => {
+        setIsPending(false);
+      })
+      .catch((err) => {
+        setIsPending(false);
+        setError(
+          err.error || "An unexpected error occurred. Please try again.",
+        );
+      });
   };
 
   return (

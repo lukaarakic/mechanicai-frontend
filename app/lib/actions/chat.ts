@@ -1,9 +1,11 @@
 "use server";
 
 import z from "zod";
+import { getJWT } from "../getJWT";
+import { revalidatePath } from "next/cache";
 
 const contentSchema = z.object({
-  content: z.string().min(50, "Content is required"),
+  content: z.string().min(10, "Content is required"),
 });
 
 const sendMessageAction = async (
@@ -11,7 +13,7 @@ const sendMessageAction = async (
   formData: FormData,
 ) => {
   const content = formData.get("content");
-  const sessionId = formData.get("sessionId");
+  const chatId = formData.get("chatId");
 
   const validatedData = contentSchema.safeParse({ content });
 
@@ -22,18 +24,18 @@ const sendMessageAction = async (
     };
   }
 
-  const res = await fetch(
-    `${process.env.API_URL}/api/v1/sessions/${sessionId}/messages`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        content,
-      }),
+  const token = await getJWT();
+
+  const res = await fetch(`${process.env.API_URL}/chats/${chatId}/messages`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${token}`,
     },
-  );
+    body: JSON.stringify({
+      content,
+    }),
+  });
 
   if (!res.ok) {
     return {
@@ -43,6 +45,8 @@ const sendMessageAction = async (
   }
 
   const data = await res.json();
+
+  revalidatePath(`/chat/${chatId}`);
 
   return {
     data,
