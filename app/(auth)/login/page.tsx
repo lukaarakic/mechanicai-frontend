@@ -1,8 +1,5 @@
 "use client";
 
-import { z } from "zod";
-
-// Components
 import Button from "@/app/components/ui/button";
 import Field from "@/app/components/ui/field";
 import ErrorList from "@/app/components/ui/ErrorList";
@@ -23,7 +20,7 @@ const Login = () => {
     <>
       <AuthHeader
         title="Welcome back"
-        subtitle="Sign in to your account to continue"
+        subtitle="Log in to your account to continue"
       />
 
       {verified && (
@@ -70,7 +67,7 @@ const Login = () => {
         <ErrorList errors={state.errors?.general} />
 
         <Button className="mt-2 w-full" type="submit" disabled={isPending}>
-          {isPending ? "Signing in…" : "Sign in"}
+          {isPending ? "Logging in…" : "Log in"}
         </Button>
       </form>
     </>

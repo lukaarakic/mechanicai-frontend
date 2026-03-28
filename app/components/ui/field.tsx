@@ -26,7 +26,7 @@ const Field: FC<FieldProps & InputHTMLAttributes<HTMLInputElement>> = ({
       {label && (
         <label
           htmlFor={name}
-          className="text-xs font-medium uppercase tracking-wide text-white/40"
+          className="text-xs font-medium capitalize tracking-wide text-white/40"
         >
           {label}
         </label>

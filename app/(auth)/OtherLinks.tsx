@@ -15,7 +15,7 @@ const OtherLinks = () => {
         <>
           Already have an account?{" "}
           <Link href="/login" className={linkClass}>
-            Sign in
+            Log in
           </Link>
         </>
       ) : pathname === "/login" ? (
@@ -27,7 +27,7 @@ const OtherLinks = () => {
         </>
       ) : pathname === "/forgot-password" ? (
         <Link href="/login" className={linkClass}>
-          ← Back to sign in
+          ← Back to log in
         </Link>
       ) : null}
     </p>

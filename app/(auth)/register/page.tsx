@@ -1,6 +1,5 @@
 "use client";
 
-// Component imports
 import Button from "@/app/components/ui/button";
 import Field from "@/app/components/ui/field";
 import ErrorList from "@/app/components/ui/ErrorList";

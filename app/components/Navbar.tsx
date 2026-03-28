@@ -13,6 +13,7 @@ import HomeIcon from "@/app/assets/icons/home-icon.svg";
 import HistoryIcon from "@/app/assets/icons/history-icon.svg";
 import SettingsIcon from "@/app/assets/icons/settings-icon.svg";
 import createChatAction from "../lib/actions/create-chat";
+import { logoutAction } from "../lib/actions/auth";
 
 interface NavbarProps {
   user: {
@@ -107,7 +108,7 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
         <Popover
           containerClassName="z-[60]"
           isOpen={isPopoverOpen}
-          positions={["right"]}
+          positions={["right", "bottom"]}
           align="end"
           content={
             <div className="ml-3 min-w-56 rounded-xl border border-white/10 bg-light-black p-4 shadow-2xl shadow-black/60">
@@ -147,18 +148,17 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
                 </span>
               </div>
 
-              {/* Actions */}
               <div className="flex flex-col gap-1.5">
                 <Link
                   href="/settings/car"
-                  className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1.5 text-center text-xs text-white/60 transition-all hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
+                  className="cursor-pointer rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1.5 text-center text-xs text-white/60 transition-all hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
                 >
                   Manage cars
                 </Link>
-                <form method="post" action="/logout">
+                <form action={logoutAction}>
                   <button
                     type="submit"
-                    className="w-full rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 transition-all hover:bg-red-500/20 hover:text-red-300"
+                    className="w-full cursor-pointer rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 transition-all hover:bg-red-500/20 hover:text-red-300"
                   >
                     Sign out
                   </button>
@@ -171,7 +171,7 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
           <button
             onClick={() => setIsPopoverOpen((s) => !s)}
             aria-label="Toggle menu"
-            className="relative rounded-full transition-opacity hover:opacity-80"
+            className="relative rounded-full cursor-pointer transition-opacity hover:opacity-80"
           >
             <Image
               src={user.avatar}
