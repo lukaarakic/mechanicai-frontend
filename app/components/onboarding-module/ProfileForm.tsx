@@ -50,8 +50,6 @@ const ProfileForm = ({ data, setData }: ProfileFormProps) => {
         [name]: value,
       },
     }));
-
-    console.log("data", data);
   };
 
   return (

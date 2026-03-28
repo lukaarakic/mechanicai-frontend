@@ -3,8 +3,8 @@ import { FC } from "react";
 
 interface Chat {
   id: string;
-  createdAt: string;
-  solutionTitle: string;
+  created_at: string;
+  title: string;
   category: string | null;
   car: {
     make: string;
@@ -12,7 +12,7 @@ interface Chat {
     year: number;
     size: number;
     power: number;
-  } | null;
+  };
 }
 
 interface HistoryListProps {
@@ -42,8 +42,8 @@ const HistoryList: FC<HistoryListProps> = ({ solutions }) => {
           key={solution.id}
           car={solution.car}
           id={solution.id}
-          title={solution.solutionTitle}
-          time={solution.createdAt}
+          title={solution.title}
+          time={solution.created_at}
           category={solution.category}
         />
       ))}

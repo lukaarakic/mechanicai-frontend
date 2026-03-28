@@ -22,7 +22,7 @@ interface HistoryCardProps {
     year: number;
     size: number;
     power: number;
-  } | null;
+  };
 }
 
 function getRelativeDateLabel(date: string): string {
@@ -46,7 +46,7 @@ const HistoryCard: FC<HistoryCardProps> = ({
   return (
     <Link
       href={`/chat/${id}`}
-      className="group relative flex w-full flex-col rounded-2xl border border-white/8 bg-white/[0.02] p-5 transition-all duration-200 hover:border-white/15 hover:bg-white/[0.05]"
+      className="group relative flex w-full flex-col rounded-2xl border border-white/8 bg-white/[0.02] p-4 transition-all duration-200 hover:border-white/15 hover:bg-white/[0.05]"
     >
       <div className="absolute inset-x-0 top-0 h-px rounded-t-2xl bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
