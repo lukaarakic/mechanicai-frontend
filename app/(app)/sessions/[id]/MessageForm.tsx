@@ -16,7 +16,7 @@ const MessageForm = ({ sessionId }: { sessionId: string }) => {
 
   return (
     <div className="mt-auto sticky bottom-0 py-6">
-      <form action={action} className="relative max-w-3xl mx-auto">
+      <form action={action} className="relative mx-auto">
         <Textarea
           name="content"
           placeholder="Describe your car problem..."

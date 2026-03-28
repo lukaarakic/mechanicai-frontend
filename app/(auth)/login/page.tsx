@@ -22,65 +22,55 @@ const Login = () => {
   return (
     <>
       <AuthHeader
-        title="Login"
-        subtitle="Use your email to login into your account"
+        title="Welcome back"
+        subtitle="Sign in to your account to continue"
       />
 
-      {/* <button className="mb-30 box-border flex h-[3.125rem] w-full cursor-pointer items-center justify-center rounded-7 border-2 border-white py-15 text-18 font-medium">
-        <Image src={GoogleLogo} alt="Google Logo" className="mr-3" />
-        Continue with Google
-      </button>
+      {verified && (
+        <div className="mb-4 flex items-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-2.5 text-sm text-emerald-400">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+          Email verified successfully!
+        </div>
+      )}
 
-      <div className="flex w-full items-center justify-center gap-3 opacity-50">
-        <div className="h-0.5 w-full bg-white" />
-        <span className="text-13 font-semibold">OR</span>
-        <div className="h-0.5 w-full bg-white" />
-      </div> */}
-
-      <form action={action} aria-label="Login Form" className="w-full">
-        <div className="mb-25">
+      <form
+        action={action}
+        aria-label="Login Form"
+        className="flex flex-col gap-4"
+      >
+        <div>
           <Field
             id="email"
             name="email"
             label="Email"
             type="email"
             placeholder="yourname@example.com"
-            className="w-full border"
           />
           <ErrorList errors={state.errors?.email} />
         </div>
 
-        <div className="mb-25">
+        <div>
           <Field
             id="password"
             type="password"
             name="password"
             label="Password"
             placeholder="Enter your password"
-            className="w-full border"
           />
           <ErrorList errors={state.errors?.password} />
         </div>
 
         <Link
-          href={"/forgot-password"}
-          className="block text-right text-blue-700 transition-colors hover:text-blue-500"
+          href="/forgot-password"
+          className="text-right text-xs text-white/40 transition-colors hover:text-white/70"
         >
           Forgot password?
         </Link>
 
         <ErrorList errors={state.errors?.general} />
-        {verified && (
-          <div className="mb-4 text-green-500">
-            Email verified successfully!
-          </div>
-        )}
-        <Button
-          className="mt-30 h-[3.125rem] w-full"
-          type="submit"
-          disabled={isPending}
-        >
-          Login
+
+        <Button className="mt-2 w-full" type="submit" disabled={isPending}>
+          {isPending ? "Signing in…" : "Sign in"}
         </Button>
       </form>
     </>

@@ -3,8 +3,6 @@
 import { redirect } from "next/navigation";
 
 const createChatAction = async () => {
-  console.log("API_URL:", process.env.API_URL);
-
   const res = await fetch(`${process.env.API_URL}/api/v1/sessions`, {
     method: "POST",
     body: JSON.stringify({

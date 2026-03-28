@@ -1,13 +1,14 @@
-import { ChangeEvent, FC, InputHTMLAttributes } from 'react'
+import { ChangeEvent, FC, InputHTMLAttributes } from "react";
+import { cn } from "@/app/lib/cn";
 
 interface FieldProps {
-  label?: string
-  type: string
-  name: string
-  value?: string
-  placeholder?: string
-  className?: string
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void
+  label?: string;
+  type: string;
+  name: string;
+  value?: string;
+  placeholder?: string;
+  className?: string;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const Field: FC<FieldProps & InputHTMLAttributes<HTMLInputElement>> = ({
@@ -16,19 +17,29 @@ const Field: FC<FieldProps & InputHTMLAttributes<HTMLInputElement>> = ({
   name,
   value,
   placeholder,
-  className = '',
+  className = "",
   onChange,
   ...props
 }) => {
   return (
-    <div className="flex w-full flex-col">
-      {label ? (
-        <label htmlFor={name} className="mb-10 text-16 font-medium">
+    <div className="flex w-full flex-col gap-1.5">
+      {label && (
+        <label
+          htmlFor={name}
+          className="text-xs font-medium uppercase tracking-wide text-white/40"
+        >
           {label}
         </label>
-      ) : null}
+      )}
       <input
-        className={`rounded-7 border border-white/15 bg-black px-4 py-3 text-16 disabled:text-white/70 ${className}`}
+        className={cn(
+          "w-full rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2.5",
+          "text-sm text-white placeholder:text-white/20",
+          "outline-none transition-all",
+          "focus:border-white/25 focus:bg-white/[0.07] focus:ring-1 focus:ring-white/10",
+          "disabled:cursor-not-allowed disabled:opacity-40",
+          className,
+        )}
         type={type}
         id={name}
         name={name}
@@ -38,7 +49,7 @@ const Field: FC<FieldProps & InputHTMLAttributes<HTMLInputElement>> = ({
         {...props}
       />
     </div>
-  )
-}
+  );
+};
 
-export default Field
+export default Field;

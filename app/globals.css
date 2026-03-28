@@ -2,11 +2,15 @@
 
 @theme {
   --color-white: #f1f1f1;
-  --color-black: #0e0e11;
-  --color-light-gray: #18181b;
-  --color-red: #cf3d33;
-  --color-light-red: #e2564c;
-  --color-green: #5ef2b8;
+  --color-black: #080808;
+  --color-light-black: #0f0f0f;
+
+  --gradient-by-the-sea: linear-gradient(
+    92deg,
+    #007bff 1.02%,
+    #6dc3f7 53.94%,
+    #c57cc6 99.69%
+  );
 
   --color-blue-50: #edfaff;
   --color-blue-100: #d6f2ff;
@@ -56,6 +60,13 @@
   --animate-accordion-up: accordion-up 0.2s ease-out;
 }
 
+@utility by-the-sea {
+  background: var(--gradient-by-the-sea);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 @layer base {
   *,
   ::after,
@@ -68,16 +79,6 @@
     background-color: var(--color-black);
     color: var(--color-white);
     font-family: "Inter";
-  }
-
-  .by-the-sea {
-    background: var(
-      --By-the-sea,
-      linear-gradient(92deg, #007bff 1.02%, #6dc3f7 53.94%, #c57cc6 99.69%)
-    );
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
   }
 
   @font-face {

@@ -24,10 +24,17 @@ const Button: FC<
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "box-border flex cursor-pointer items-center justify-center rounded-sm p-2 py-4 text-18 font-medium text-white transition duration-200 disabled:bg-blue-950 disabled:text-blue-500",
-        variant === "primary" && "bg-blue-700 hover:bg-blue-600",
-        variant === "destructive" && "bg-red-600 hover:bg-red-500",
-        variant === "outline" && "border border-white hover:bg-white/10",
+        "inline-flex cursor-pointer items-center justify-center gap-2",
+        "rounded-lg px-4 py-2.5 text-sm font-semibold",
+        "transition-all duration-150 active:scale-[0.98]",
+        "disabled:pointer-events-none disabled:opacity-40",
+
+        variant === "primary" && "bg-white text-black hover:bg-white/90",
+        variant === "destructive" &&
+          "border border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:text-red-300",
+        variant === "outline" &&
+          "border border-white/10 bg-white/[0.04] text-white/70 hover:border-white/20 hover:bg-white/[0.08] hover:text-white",
+
         className,
       )}
       {...props}

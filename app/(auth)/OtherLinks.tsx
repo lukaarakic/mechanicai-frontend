@@ -1,41 +1,36 @@
 "use client";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const OtherLinks = () => {
   const pathname = usePathname();
 
+  const linkClass =
+    "text-white/60 underline-offset-2 transition-colors hover:text-white";
+
   return (
-    <>
+    <p className="text-sm text-white/30">
       {pathname === "/register" ? (
-        <p>
+        <>
           Already have an account?{" "}
-          <Link
-            href={"/login"}
-            className="text-blue-700 hover:text-blue-500 transition-colors"
-          >
-            Log in
+          <Link href="/login" className={linkClass}>
+            Sign in
           </Link>
-        </p>
+        </>
       ) : pathname === "/login" ? (
-        <p>
-          Don’t have an account yet?{" "}
-          <Link
-            href={"/register"}
-            className="text-blue-700 hover:text-blue-500 transition-colors"
-          >
-            Register now.
+        <>
+          No account yet?{" "}
+          <Link href="/register" className={linkClass}>
+            Create one
           </Link>
-        </p>
+        </>
       ) : pathname === "/forgot-password" ? (
-        <Link
-          href={"/login"}
-          className="text-blue-700 hover:text-blue-500 transition-colors"
-        >
-          Go back to login page
+        <Link href="/login" className={linkClass}>
+          ← Back to sign in
         </Link>
       ) : null}
-    </>
+    </p>
   );
 };
 

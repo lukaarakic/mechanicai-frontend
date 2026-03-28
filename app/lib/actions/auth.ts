@@ -61,8 +61,6 @@ export async function loginAction(
       };
     }
 
-    console.log("Login response", response);
-
     if (!response.ok) {
       throw new Error("Server responded with an error");
     }
@@ -137,8 +135,6 @@ export async function registerAction(
       }),
     });
 
-    console.log("Registration response", response);
-
     if (!response.ok) {
       const errorData = await response.json();
       console.error("Registration failed", errorData);
@@ -150,8 +146,6 @@ export async function registerAction(
         },
       };
     }
-
-    console.log("Registration successful", response);
 
     return {
       errors: null,

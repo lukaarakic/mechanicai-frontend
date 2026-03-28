@@ -43,7 +43,6 @@ const sendMessageAction = async (
   }
 
   const data = await res.json();
-  console.log("Response from API:", data);
 
   return {
     data,

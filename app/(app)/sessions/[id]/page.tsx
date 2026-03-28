@@ -9,7 +9,7 @@ const Session = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
 
   return (
-    <div className="mx-auto min-h-screen mt-20 flex flex-col px-10 lg:px-20">
+    <div className="min-h-screen mt-20 flex flex-col px-10 lg:px-20 max-w-3xl mx-auto w-full">
       <div className="sticky top-10 mb-20 flex items-center gap-10 lg:top-20">
         <Link
           href="/"
