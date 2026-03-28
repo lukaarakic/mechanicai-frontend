@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 
 const createChatAction = async () => {
-  const res = await fetch(`${process.env.API_URL}/api/v1/sessions`, {
+  const res = await fetch(`${process.env.API_URL}/api/v1/chat`, {
     method: "POST",
     body: JSON.stringify({
       session: {
@@ -19,7 +19,7 @@ const createChatAction = async () => {
 
   const data = await res.json();
 
-  redirect(`/sessions/${data.uuid}`);
+  redirect(`/chat/${data.uuid}`);
 };
 
 export default createChatAction;

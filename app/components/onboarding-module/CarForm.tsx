@@ -2,52 +2,24 @@
 
 import { Dispatch, SetStateAction } from "react";
 import Field from "../ui/field";
+import { OnboardingData } from "@/app/types/onboarding";
 
 interface CarFormProps {
-  data: {
-    profile: {
-      firstName: string;
-      lastName: string;
-      avatar: string;
-    };
-    car: {
-      make: string;
-      model: string;
-      year: string;
-      size: string;
-      power: string;
-    };
-  };
-  setData: Dispatch<
-    SetStateAction<{
-      profile: {
-        firstName: string;
-        lastName: string;
-        avatar: string;
-      };
-      car: {
-        make: string;
-        model: string;
-        year: string;
-        size: string;
-        power: string;
-      };
-    }>
-  >;
+  data: OnboardingData;
+  setData: Dispatch<SetStateAction<OnboardingData>>;
 }
 
 const CarForm = ({ data, setData }: CarFormProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
     setData((prev) => ({
       ...prev,
-      car: { ...prev.car, [name]: value },
+      car: { ...prev.car, [name]: type === "number" ? +value : value },
     }));
   };
 
   return (
     <form className="flex flex-col gap-6" onSubmit={(e) => e.preventDefault()}>
-      {/* Header */}
       <div className="flex flex-col items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-6">
         <div className="relative">
           <div className="absolute -inset-1 rounded-full bg-linear-to-br from-white/20 to-white/0 blur-sm" />
@@ -58,7 +30,6 @@ const CarForm = ({ data, setData }: CarFormProps) => {
         <p className="text-xs text-white/30">Your vehicle</p>
       </div>
 
-      {/* Make + Model */}
       <div className="grid grid-cols-2 gap-3">
         <Field
           name="make"
@@ -78,7 +49,6 @@ const CarForm = ({ data, setData }: CarFormProps) => {
         />
       </div>
 
-      {/* Year */}
       <Field
         name="year"
         type="number"
@@ -90,7 +60,6 @@ const CarForm = ({ data, setData }: CarFormProps) => {
         max={new Date().getFullYear()}
       />
 
-      {/* Size + Power */}
       <div className="grid grid-cols-2 gap-3">
         <Field
           name="size"

@@ -1,42 +1,14 @@
 "use client";
 
 import Field from "../ui/field";
-import Button from "../ui/button";
 import Image from "next/image";
 import { randomSeed } from "@/app/utils/random-seed";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { OnboardingData } from "@/app/types/onboarding";
 
 interface ProfileFormProps {
-  data: {
-    profile: {
-      firstName: string;
-      lastName: string;
-      avatar: string;
-    };
-    car: {
-      make: string;
-      model: string;
-      year: string;
-      size: string;
-      power: string;
-    };
-  };
-  setData: Dispatch<
-    SetStateAction<{
-      profile: {
-        firstName: string;
-        lastName: string;
-        avatar: string;
-      };
-      car: {
-        make: string;
-        model: string;
-        year: string;
-        size: string;
-        power: string;
-      };
-    }>
-  >;
+  data: OnboardingData;
+  setData: Dispatch<SetStateAction<OnboardingData>>;
 }
 
 const ProfileForm = ({ data, setData }: ProfileFormProps) => {
@@ -57,6 +29,16 @@ const ProfileForm = ({ data, setData }: ProfileFormProps) => {
       },
     }));
   };
+
+  useEffect(() => {
+    setData((prevData) => ({
+      ...prevData,
+      profile: {
+        ...prevData.profile,
+        avatar: `https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${avatarSeed || randomSeed()}`,
+      },
+    }));
+  }, []);
 
   const handleDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -106,20 +88,20 @@ const ProfileForm = ({ data, setData }: ProfileFormProps) => {
       <div className="grid grid-cols-2 gap-3">
         <div className="flex flex-col gap-1.5">
           <Field
-            name="firstName"
+            name="first_name"
             label="First name"
             type="text"
             placeholder="Ada"
-            value={data.profile.firstName}
+            value={data.profile.first_name}
             onChange={handleDataChange}
           />
         </div>
         <div className="flex flex-col gap-1.5">
           <Field
-            name="lastName"
+            name="last_name"
             label="Last name"
             type="text"
-            value={data.profile.lastName}
+            value={data.profile.last_name}
             onChange={handleDataChange}
             placeholder="Lovelace"
           />

@@ -5,7 +5,7 @@ interface FieldProps {
   label?: string;
   type: string;
   name: string;
-  value?: string;
+  value?: string | number;
   placeholder?: string;
   className?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;

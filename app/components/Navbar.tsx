@@ -12,15 +12,15 @@ import WhiteLogo from "@/app/assets/logo-white.svg";
 import HomeIcon from "@/app/assets/icons/home-icon.svg";
 import HistoryIcon from "@/app/assets/icons/history-icon.svg";
 import SettingsIcon from "@/app/assets/icons/settings-icon.svg";
+import createChatAction from "../lib/actions/create-chat";
 
 interface NavbarProps {
   user: {
     email: string;
-    firstName: string;
-    lastName: string;
+    first_name: string;
+    last_name: string;
     avatar: string;
     id: string;
-    car: { id: string }[];
     subscription: { status: string } | null;
   };
 }
@@ -71,11 +71,11 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
         <div className="mb-3 h-px w-8 bg-white/10" />
 
         <Link
-          href="/sessions/1"
+          href={"/chat"}
           aria-label="New chat"
           className={cn(
-            "mb-3 flex items-center justify-center rounded-xl p-2.5 transition-all",
-            isActive("/sessions/1")
+            "mb-3 flex items-center justify-center cursor-pointer rounded-xl p-2.5 transition-all",
+            isActive("/chat")
               ? "bg-white text-black"
               : "border border-white/10 bg-white/[0.04] text-white/50 hover:border-white/20 hover:bg-white/[0.08] hover:text-white",
           )}
@@ -104,7 +104,6 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
           />
         </div>
 
-        {/* Avatar */}
         <Popover
           containerClassName="z-[60]"
           isOpen={isPopoverOpen}
@@ -118,17 +117,17 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
                   alt="avatar"
                   width={36}
                   height={36}
+                  unoptimized
                   className="rounded-full object-cover"
                 />
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium text-white">
-                    {user.firstName} {user.lastName}
+                    {user.first_name} {user.last_name}
                   </p>
                   <p className="truncate text-xs text-white/30">{user.email}</p>
                 </div>
               </div>
 
-              {/* Subscription badge */}
               <div className="mb-3 flex items-center gap-2">
                 <span
                   className={cn(
@@ -179,6 +178,7 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
               alt="User avatar"
               width={36}
               height={36}
+              unoptimized
               className="rounded-full object-cover ring-1 ring-white/10"
             />
             {isSubscribed && (
@@ -188,7 +188,6 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
         </Popover>
       </nav>
 
-      {/* Mobile bottom bar */}
       <nav className="fixed bottom-0 left-0 z-50 flex w-full items-center justify-around border-t border-white/[0.06] bg-light-black/90 px-4 py-3 backdrop-blur-md md:hidden">
         <NavLink href="/" icon={HomeIcon} active={isActive("/")} label="Home" />
         <NavLink
@@ -198,7 +197,6 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
           label="History"
         />
 
-        {/* New chat — center CTA */}
         <Link
           href="/sessions/1"
           aria-label="New chat"
@@ -224,6 +222,7 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
             alt="User avatar"
             width={32}
             height={32}
+            unoptimized
             className="rounded-full object-cover ring-1 ring-white/10"
           />
           {isSubscribed && (

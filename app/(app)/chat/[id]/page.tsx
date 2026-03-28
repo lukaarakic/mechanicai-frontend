@@ -5,7 +5,7 @@ import LogoWhite from "@/app/assets/logo-white.svg";
 import Markdown from "react-markdown";
 import MessageForm from "./MessageForm";
 
-const Session = async ({ params }: { params: Promise<{ id: string }> }) => {
+const Chat = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
 
   return (
@@ -39,4 +39,4 @@ const Session = async ({ params }: { params: Promise<{ id: string }> }) => {
   );
 };
 
-export default Session;
+export default Chat;
