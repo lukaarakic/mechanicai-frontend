@@ -1,8 +1,8 @@
 import Link from "next/link";
-import Button from "../components/ui/button";
-import { getUser } from "../lib/getUser";
-import { getJWT } from "../lib/getJWT";
-import HistoryList from "../components/history/history-list";
+import Button from "../components/ui/Button";
+import { getUser } from "../lib/get-user";
+import { getJWT } from "../lib/get-jwt";
+import HistoryList from "../components/history/HistoryList";
 
 const Index = async () => {
   const user = await getUser();

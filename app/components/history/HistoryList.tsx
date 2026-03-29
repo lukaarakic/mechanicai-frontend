@@ -1,4 +1,4 @@
-import HistoryCard from "./history-card";
+import HistoryCard from "./HistoryCard";
 import { FC } from "react";
 
 interface Chat {

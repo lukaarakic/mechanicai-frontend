@@ -1,5 +1,5 @@
-import HistoryList from "@/app/components/history/history-list";
-import { getJWT } from "@/app/lib/getJWT";
+import HistoryList from "@/app/components/history/HistoryList";
+import { getJWT } from "@/app/lib/get-jwt";
 
 const History = async () => {
   const token = await getJWT();

@@ -1,7 +1,7 @@
 "use client";
 
-import Button from "@/app/components/ui/button";
-import Field from "@/app/components/ui/field";
+import Button from "@/app/components/ui/Button";
+import Field from "@/app/components/ui/Field";
 import ErrorList from "@/app/components/ui/ErrorList";
 import AuthHeader from "@/app/components/AuthHeader";
 import Link from "next/link";

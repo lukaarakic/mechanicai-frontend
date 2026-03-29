@@ -1,7 +1,7 @@
 import Link from "next/link";
 import ArrowLeft from "@/app/assets/icons/arrow-left.svg";
-import { getJWT } from "@/app/lib/getJWT";
-import { getUser } from "@/app/lib/getUser";
+import { getJWT } from "@/app/lib/get-jwt";
+import { getUser } from "@/app/lib/get-user";
 import ChatMessages from "./ChatMessages";
 
 const Chat = async ({ params }: { params: Promise<{ id: string }> }) => {

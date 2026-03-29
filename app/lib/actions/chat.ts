@@ -1,7 +1,7 @@
 "use server";
 
 import z from "zod";
-import { getJWT } from "../getJWT";
+import { getJWT } from "../get-jwt";
 import { revalidatePath } from "next/cache";
 
 const contentSchema = z.object({

@@ -1,7 +1,6 @@
-import { cookies } from "next/headers";
 import Navbar from "../components/Navbar";
-import OnboardingForm from "../components/onboarding-module/OnboardingForm";
-import { getUser } from "../lib/getUser";
+import OnboardingForm from "../components/onboarding/OnboardingForm";
+import { getUser } from "../lib/get-user";
 
 async function Layout({
   children,

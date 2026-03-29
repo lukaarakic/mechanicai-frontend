@@ -1,8 +1,15 @@
 "use client";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { ReactNode } from "react";
 
-const SettingsLink = ({ href, children }) => {
+const SettingsLink = ({
+  href,
+  children,
+}: {
+  href: string;
+  children: ReactNode;
+}) => {
   const pathname = usePathname();
   const isActive = pathname === href;
 

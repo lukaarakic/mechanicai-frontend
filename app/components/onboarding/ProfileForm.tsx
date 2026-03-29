@@ -1,6 +1,6 @@
 "use client";
 
-import Field from "../ui/field";
+import Field from "../ui/Field";
 import Image from "next/image";
 import { randomSeed } from "@/app/utils/random-seed";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";

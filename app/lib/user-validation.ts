@@ -4,6 +4,7 @@ export const PasswordSchema = z
   .string({ error: "Password is required" })
   .min(8, { message: "Password is too short" })
   .max(50, { message: "Password is too long" });
+
 export const EmailSchema = z
   .string({ error: "Email is required" })
   .email({ message: "Email is invalid" })

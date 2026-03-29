@@ -1,10 +1,4 @@
-export type CarData = {
-  make: string;
-  model: string;
-  year: number | "";
-  size: number | "";
-  power: number | "";
-};
+import { Car } from "./car";
 
 export type ProfileData = {
   first_name: string;
@@ -14,5 +8,5 @@ export type ProfileData = {
 
 export type OnboardingData = {
   profile: ProfileData;
-  car: CarData;
+  car: Car;
 };

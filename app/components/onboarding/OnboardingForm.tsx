@@ -3,7 +3,7 @@
 import { useState } from "react";
 import ProfileForm from "./ProfileForm";
 import CarForm from "./CarForm";
-import Button from "../ui/button";
+import Button from "../ui/Button";
 import { onboardingAction } from "@/app/lib/actions/onboarding";
 import { OnboardingData } from "@/app/types/onboarding";
 

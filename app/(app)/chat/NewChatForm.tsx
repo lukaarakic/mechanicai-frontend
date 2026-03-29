@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Button from "@/app/components/ui/button";
+import Button from "@/app/components/ui/Button";
 import createChatAction from "@/app/lib/actions/create-chat";
 
 interface Car {

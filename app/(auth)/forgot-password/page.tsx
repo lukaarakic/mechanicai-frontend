@@ -1,6 +1,6 @@
-import Button from "@/app/components/ui/button";
+import Button from "@/app/components/ui/Button";
 import ErrorList from "@/app/components/ui/ErrorList";
-import Field from "@/app/components/ui/field";
+import Field from "@/app/components/ui/Field";
 import { EmailSchema } from "@/app/lib/user-validation";
 import { z } from "zod";
 

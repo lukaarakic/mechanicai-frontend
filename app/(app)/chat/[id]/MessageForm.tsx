@@ -1,9 +1,9 @@
 "use client";
 
-import Button from "@/app/components/ui/button";
-import { Textarea } from "@/app/components/ui/textarea";
+import Button from "@/app/components/ui/Button";
 import ArrowLeft from "@/app/assets/icons/arrow-left.svg";
 import { useRef } from "react";
+import { Textarea } from "@/app/components/ui/textarea";
 
 const MessageForm = ({
   chatId,
@@ -31,7 +31,6 @@ const MessageForm = ({
           ref={textareaRef}
           name="content"
           placeholder="Ask a follow-up question..."
-          className="w-full pr-12 py-3.5 min-h-[52px] bg-white/[0.04] border border-white/10 rounded-xl text-sm text-white placeholder:text-white/25 focus:border-white/20 focus:outline-none transition-colors resize-none"
         />
         <input type="hidden" name="chatId" value={chatId} />
         <Button

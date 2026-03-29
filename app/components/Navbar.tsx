@@ -12,18 +12,11 @@ import WhiteLogo from "@/app/assets/logo-white.svg";
 import HomeIcon from "@/app/assets/icons/home-icon.svg";
 import HistoryIcon from "@/app/assets/icons/history-icon.svg";
 import SettingsIcon from "@/app/assets/icons/settings-icon.svg";
-import createChatAction from "../lib/actions/create-chat";
 import { logoutAction } from "../lib/actions/auth";
+import { User } from "../types/user";
 
 interface NavbarProps {
-  user: {
-    email: string;
-    first_name: string;
-    last_name: string;
-    avatar: string;
-    id: string;
-    subscription: { status: string } | null;
-  };
+  user: User;
 }
 
 const NavLink = ({
@@ -60,7 +53,7 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
     return pathname === href || pathname.startsWith(`${href}/`);
   };
 
-  const isSubscribed = user.subscription?.status === "ACTIVE";
+  const isSubscribed = "ACTIVE";
 
   return (
     <>

@@ -1,26 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import Button from "@/app/components/ui/Button";
+import { subscribeAction } from "@/app/lib/actions/settings/subscription/subscribe";
+import { initializePaddle } from "@paddle/paddle-js";
+import { useTransition } from "react";
 
 const SubscribeButton = () => {
-  const [isPending, setIsPending] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const handleClick = async () => {
-    setIsPending(true);
+    startTransition(async () => {
+      const { customer_id } = await subscribeAction();
 
-    // Make API call to create subscription
+      const paddle = await initializePaddle({
+        environment: "sandbox",
+        token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN!,
+        pwCustomer: { id: customer_id },
+      });
 
-    setIsPending(false);
+      paddle?.Checkout.open({
+        items: [
+          {
+            priceId: process.env.NEXT_PUBLIC_PADDLE_PRICE_ID!,
+            quantity: 1,
+          },
+        ],
+      });
+    });
   };
 
   return (
-    <button
-      onClick={handleClick}
-      disabled={isPending}
-      className="w-full rounded-lg bg-white py-2 text-xs font-semibold text-black transition-all hover:bg-white/90 active:scale-[0.98] disabled:opacity-50"
-    >
+    <Button onClick={handleClick} disabled={isPending} className="w-full ">
       {isPending ? "Loading..." : "Upgrade to Pro →"}
-    </button>
+    </Button>
   );
 };
 

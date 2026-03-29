@@ -1,7 +1,7 @@
 "use client";
 
 import { Dispatch, SetStateAction } from "react";
-import Field from "../ui/field";
+import Field from "../ui/Field";
 import { OnboardingData } from "@/app/types/onboarding";
 
 interface CarFormProps {

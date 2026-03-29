@@ -1,6 +1,6 @@
 "use server";
 
-import { getJWT } from "./getJWT";
+import { getJWT } from "./get-jwt";
 
 export async function getCars() {
   const token = await getJWT();

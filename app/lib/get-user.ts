@@ -1,6 +1,8 @@
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { User } from "../types/user";
 
-export async function getUser() {
+export async function getUser(): Promise<User> {
   const cookieStore = await cookies();
   const jwtToken = cookieStore.get("auth_token")?.value;
 
@@ -9,5 +11,7 @@ export async function getUser() {
     headers: { Authorization: `${jwtToken}` },
   });
 
-  return response.ok ? await response.json() : null;
+  if (!response.ok) redirect("/login");
+
+  return response.json();
 }

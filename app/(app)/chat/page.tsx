@@ -1,5 +1,5 @@
 import NewChatForm from "./NewChatForm";
-import { getJWT } from "@/app/lib/getJWT";
+import { getJWT } from "@/app/lib/get-jwt";
 
 async function getCars() {
   const token = await getJWT();

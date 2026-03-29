@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { cookies } from "next/headers";
 import SubscribeButton from "./SubscribeButton";
 import CancelButton from "./CancelButton";
@@ -130,7 +131,7 @@ const SubscriptionPage = async () => {
             </ul>
             {!isPro && (
               <div className="mt-auto pt-2">
-                <div className="w-full rounded-lg border border-white/10 py-2 text-center text-xs text-white/30">
+                <div className="w-full rounded-lg border border-white/10 py-2.5 text-center text-xs text-white/30">
                   Current plan
                 </div>
               </div>
