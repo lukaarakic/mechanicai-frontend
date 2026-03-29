@@ -15,10 +15,10 @@ const SubscribeButton = () => {
       const paddle = await initializePaddle({
         environment: "sandbox",
         token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN!,
-        pwCustomer: { id: customer_id },
       });
 
       paddle?.Checkout.open({
+        customer: { id: customer_id },
         items: [
           {
             priceId: process.env.NEXT_PUBLIC_PADDLE_PRICE_ID!,
