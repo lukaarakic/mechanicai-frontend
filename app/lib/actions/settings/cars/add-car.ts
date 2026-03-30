@@ -63,9 +63,11 @@ export async function addCarAction(
 
   if (!res.ok) {
     const error = await res.json();
+    console.log("Error adding car:", error);
     return {
       errors: {
-        general: error["field-error"]?.[1] ?? "Failed to add car",
+        general:
+          error["field-error"]?.[1] ?? error["error"] ?? "Failed to add car",
       },
       success: false,
     };

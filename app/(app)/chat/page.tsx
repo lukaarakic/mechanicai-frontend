@@ -1,15 +1,11 @@
+import type { Metadata } from "next";
 import NewChatForm from "./NewChatForm";
-import { getJWT } from "@/app/lib/get-jwt";
+import { getCars } from "@/app/lib/get-cars";
 
-async function getCars() {
-  const token = await getJWT();
-
-  const res = await fetch(`${process.env.API_URL}/cars`, {
-    headers: { Authorization: `${token}` },
-  });
-
-  return res.ok ? await res.json() : [];
-}
+export const metadata: Metadata = {
+  title: "New Chat | MechanicAI",
+  description: "Start a new diagnostic conversation for your vehicle.",
+};
 
 const NewChat = async () => {
   const cars = await getCars();

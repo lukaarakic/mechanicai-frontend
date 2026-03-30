@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import Section from "../../../components/ui/Section";
 import { getCars } from "@/app/lib/get-cars";
 import { Car } from "@/app/types/car";
 import RemoveCarForm from "./components/RemoveCarForm";
 import AddCar from "./components/AddCar";
+
+export const metadata: Metadata = {
+  title: "Car Settings | MechanicAI",
+  description: "Add, edit, and remove vehicles linked to your account.",
+};
 
 const CarSettings = async () => {
   const cars = await getCars();

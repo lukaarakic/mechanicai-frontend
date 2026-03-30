@@ -88,10 +88,9 @@
     src: url("/font/InterVariable.woff2") format("woff2");
   }
 
-  .markdown h1 {
-    margin-bottom: 1.25rem;
-    font-size: 1.75rem;
-    font-weight: 700;
+  .markdown {
+    line-height: 1.6;
+    color: #e2e8f0;
   }
 
   .markdown h2 {
@@ -99,6 +98,12 @@
     margin-bottom: 1rem;
     font-size: 1.375rem;
     font-weight: 700;
+    border-bottom: 1px solid #333;
+    padding-bottom: 0.5rem;
+  }
+
+  .markdown h2:first-of-type {
+    margin-top: 0rem;
   }
 
   .markdown h3 {
@@ -106,24 +111,22 @@
     margin-bottom: 0.75rem;
     font-size: 1.125rem;
     font-weight: 600;
+    color: #ffffff;
   }
 
   .markdown p {
-    margin-bottom: 0.75rem;
-    line-height: 1.6;
+    margin-bottom: 1rem;
   }
 
   .markdown p:last-child {
-    margin-top: 2rem;
+    margin-bottom: 0;
   }
 
   .markdown ol,
   .markdown ul {
     padding-left: 1.5rem;
-    margin-top: 0.5rem;
     margin-bottom: 1rem;
     list-style-position: outside;
-    gap: 0.5rem;
   }
 
   .markdown ol {
@@ -138,28 +141,18 @@
     margin-bottom: 0.5rem;
   }
 
-  .markdown li p {
-    margin-bottom: 0.25rem;
-  }
-
-  .markdown hr {
-    border: none;
-    border-top: 1px solid #333;
-    margin: 2rem 0;
+  .markdown strong {
+    font-weight: 700;
+    color: #ffffff;
   }
 
   .markdown blockquote {
-    border-left: 4px solid #ffd43b;
+    border-left: 4px solid #f1f1f126;
     padding-left: 1rem;
     margin: 1.5rem 0;
     color: #ccc;
     font-style: italic;
     background: rgba(255, 212, 59, 0.05);
-  }
-
-  .markdown strong {
-    font-weight: 600;
-    color: #fff;
   }
 
   .scrollbar {

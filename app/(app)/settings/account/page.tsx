@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Button from "@/app/components/ui/Button";
 import Field from "@/app/components/ui/Field";
 import { getUser } from "@/app/lib/get-user";
@@ -6,6 +7,11 @@ import Section from "../../../components/ui/Section";
 import ProfileForm from "./components/ProfileForm";
 import ChangePasswordForm from "./components/ChangePasswordForm";
 import DeleteAccount from "./components/DeleteAccount";
+
+export const metadata: Metadata = {
+  title: "Account Settings | MechanicAI",
+  description: "Update your profile, password, and account preferences.",
+};
 
 const AccountSettings = async () => {
   const user = await getUser();

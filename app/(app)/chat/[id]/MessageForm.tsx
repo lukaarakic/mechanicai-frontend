@@ -3,7 +3,7 @@
 import Button from "@/app/components/ui/Button";
 import ArrowLeft from "@/app/assets/icons/arrow-left.svg";
 import { useRef } from "react";
-import { Textarea } from "@/app/components/ui/textarea";
+import { Textarea } from "@/app/components/ui/Textarea";
 
 const MessageForm = ({
   chatId,
@@ -37,10 +37,7 @@ const MessageForm = ({
           disabled={isPending}
           className="absolute bottom-2.5 right-2.5 h-7 w-7 rounded-lg bg-white hover:bg-white/90 p-0 flex items-center justify-center transition-all active:scale-95 disabled:opacity-40"
         >
-          <ArrowLeft
-            className="rotate-90 w-3.5 h-3.5"
-            style={{ fill: "#000" }}
-          />
+          <ArrowLeft className="rotate-90 w-5 h-5" style={{ fill: "#000" }} />
         </Button>
       </form>
 

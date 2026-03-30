@@ -17,7 +17,7 @@ const createChatAction = async (carId: string, message: string) => {
 
   if (!res.ok) {
     const errorData = await res.json();
-    return { error: errorData.message || "Failed to create chat" };
+    return { error: errorData["error"] ?? "Failed to create chat" };
   }
 
   const data = await res.json();

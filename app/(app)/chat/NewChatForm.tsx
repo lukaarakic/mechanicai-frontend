@@ -1,21 +1,16 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import Button from "@/app/components/ui/Button";
 import createChatAction from "@/app/lib/actions/create-chat";
-
-interface Car {
-  id: string;
-  make: string;
-  model: string;
-  year: number;
-}
+import { Car } from "@/app/types/car";
 
 const NewChatForm = ({ cars }: { cars: Car[] }) => {
   const [selectedCarId, setSelectedCarId] = useState(cars[0]?.id ?? "");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const [isPending, setIsPending] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,20 +18,12 @@ const NewChatForm = ({ cars }: { cars: Car[] }) => {
       setError("Please select a car and describe the problem.");
       return;
     }
-
-    setIsPending(true);
     setError("");
 
-    createChatAction(selectedCarId, message)
-      .then(() => {
-        setIsPending(false);
-      })
-      .catch((err) => {
-        setIsPending(false);
-        setError(
-          err.error || "An unexpected error occurred. Please try again.",
-        );
-      });
+    startTransition(async () => {
+      const chat = await createChatAction(selectedCarId, message);
+      setError(chat.error);
+    });
   };
 
   return (

@@ -50,8 +50,8 @@ const HistoryCard: FC<HistoryCardProps> = ({
     >
       <div className="absolute inset-x-0 top-0 h-px rounded-t-2xl bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
-      <p className="mb-4 line-clamp-2 text-sm font-medium leading-snug text-white/90">
-        {title}
+      <p className="mb-6 line-clamp-2 text-sm font-medium leading-snug text-white/90">
+        {title ?? "Diagnostic session"}
       </p>
 
       <div className="mt-auto flex items-center justify-between gap-3">

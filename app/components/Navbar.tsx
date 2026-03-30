@@ -143,7 +143,7 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
 
               <div className="flex flex-col gap-1.5">
                 <Link
-                  href="/settings/car"
+                  href="/settings/cars"
                   className="cursor-pointer rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1.5 text-center text-xs text-white/60 transition-all hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
                 >
                   Manage cars

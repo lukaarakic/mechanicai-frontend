@@ -1,35 +1,15 @@
 /* eslint-disable react/no-unescaped-entities */
-import { cookies } from "next/headers";
+import type { Metadata } from "next";
 import SubscribeButton from "./SubscribeButton";
 import CancelButton from "./CancelButton";
 import Section from "@/app/components/ui/Section";
-import { getUser } from "@/app/lib/get-user";
 import { cn } from "@/app/lib/cn";
+import { getSubscription } from "@/app/lib/actions/settings/subscription/get-subscription";
 
-async function getSubscription() {
-  const cookieStore = await cookies();
-  const { id } = await getUser();
-  const token = cookieStore.get("auth_token")?.value;
-
-  const res = await fetch(
-    `${process.env.API_URL}/accounts/${id}/payment/subscription`,
-    {
-      method: "GET",
-      headers: { Authorization: `${token}` },
-      cache: "no-store",
-    },
-  );
-
-  const data = await res.json();
-
-  return res.ok
-    ? data
-    : {
-        subscribed: false,
-        cancel_at_period_end: data.cancel_at_period_end,
-        renews_at: data.renews_at,
-      };
-}
+export const metadata: Metadata = {
+  title: "Subscription | MechanicAI",
+  description: "Manage your MechanicAI plan and billing details.",
+};
 
 const FREE_FEATURES = [
   "3 diagnostics per month",
@@ -60,7 +40,6 @@ const Check = ({ muted = false }: { muted?: boolean }) => (
 
 const SubscriptionPage = async () => {
   const subscription = await getSubscription();
-  console.log(subscription);
   const isPro = subscription.subscribed;
   const isCancelling = subscription.cancel_at_period_end;
 

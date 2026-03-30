@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import ArrowLeft from "@/app/assets/icons/arrow-left.svg";
 import { getJWT } from "@/app/lib/get-jwt";
 import { getUser } from "@/app/lib/get-user";
 import ChatMessages from "./ChatMessages";
+
+export const metadata: Metadata = {
+  title: "Chat | MechanicAI",
+  description: "Review your diagnostic messages and continue the session.",
+};
 
 const Chat = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
@@ -27,6 +33,8 @@ const Chat = async ({ params }: { params: Promise<{ id: string }> }) => {
   const data = await res.json();
 
   const initialMessages = data.messages || [];
+
+  console.log("Chat data:", data);
 
   return (
     <div className="flex flex-col h-full max-w-3xl mx-auto w-full px-4 lg:px-8">

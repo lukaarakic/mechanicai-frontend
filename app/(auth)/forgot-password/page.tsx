@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import Button from "@/app/components/ui/Button";
 import ErrorList from "@/app/components/ui/ErrorList";
 import Field from "@/app/components/ui/Field";
 import { EmailSchema } from "@/app/lib/user-validation";
 import { z } from "zod";
+
+export const metadata: Metadata = {
+  title: "Forgot Password | MechanicAI",
+  description: "Request a password reset link for your MechanicAI account.",
+};
 
 const ForgotPasswordSchema = z.object({
   email: EmailSchema,

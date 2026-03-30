@@ -2,20 +2,33 @@
 
 import Button from "@/app/components/ui/Button";
 import { subscribeAction } from "@/app/lib/actions/settings/subscription/subscribe";
-import { initializePaddle } from "@paddle/paddle-js";
-import { useTransition } from "react";
+import { initializePaddle, Paddle } from "@paddle/paddle-js";
+import { useRouter } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
 
 const SubscribeButton = () => {
+  const [paddle, setPaddle] = useState<Paddle | undefined>(undefined);
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
+  useEffect(() => {
+    initializePaddle({
+      environment: "sandbox",
+      token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN!,
+      eventCallback: function (data) {
+        if (data.name == "checkout.completed") {
+          console.log("Checkout completed:", data);
+          setTimeout(() => {
+            router.refresh();
+          }, 2000);
+        }
+      },
+    }).then(setPaddle);
+  }, []);
 
   const handleClick = async () => {
     startTransition(async () => {
       const { customer_id } = await subscribeAction();
-
-      const paddle = await initializePaddle({
-        environment: "sandbox",
-        token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN!,
-      });
 
       paddle?.Checkout.open({
         customer: { id: customer_id },

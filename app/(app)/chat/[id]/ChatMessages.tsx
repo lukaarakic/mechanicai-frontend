@@ -72,7 +72,7 @@ const ChatMessages = ({ chatId, messages, user }: ChatMessagesProps) => {
               </div>
 
               <div className="ml-9 rounded-2xl rounded-tl-sm border border-white/[0.06] bg-white/[0.03] px-4 py-4">
-                <div className="prose prose-invert prose-sm max-w-none prose-p:text-white/80 prose-headings:text-white prose-strong:text-white">
+                <div className="markdown prose prose-invert prose-sm max-w-none prose-p:text-white/80 prose-headings:text-white prose-strong:text-white">
                   <Markdown>{message.content}</Markdown>
                 </div>
               </div>
