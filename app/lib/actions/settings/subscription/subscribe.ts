@@ -23,6 +23,5 @@ export async function subscribeAction(): Promise<{ customer_id: string }> {
   }
 
   const data = await response.json();
-  console.log("Subscription created:", data);
   return data;
 }

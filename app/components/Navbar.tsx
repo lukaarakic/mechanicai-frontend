@@ -53,7 +53,7 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
     return pathname === href || pathname.startsWith(`${href}/`);
   };
 
-  const isSubscribed = "ACTIVE";
+  const isSubscribed = user.subscribed;
 
   return (
     <>

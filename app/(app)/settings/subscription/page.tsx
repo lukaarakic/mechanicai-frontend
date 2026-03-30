@@ -3,17 +3,32 @@ import { cookies } from "next/headers";
 import SubscribeButton from "./SubscribeButton";
 import CancelButton from "./CancelButton";
 import Section from "@/app/components/ui/Section";
+import { getUser } from "@/app/lib/get-user";
+import { cn } from "@/app/lib/cn";
 
 async function getSubscription() {
   const cookieStore = await cookies();
+  const { id } = await getUser();
   const token = cookieStore.get("auth_token")?.value;
 
-  const res = await fetch(`${process.env.API_URL}/api/v1/subscription`, {
-    headers: { Authorization: `${token}` },
-    cache: "no-store",
-  });
+  const res = await fetch(
+    `${process.env.API_URL}/accounts/${id}/payment/subscription`,
+    {
+      method: "GET",
+      headers: { Authorization: `${token}` },
+      cache: "no-store",
+    },
+  );
 
-  return res.ok ? await res.json() : { subscribed: false };
+  const data = await res.json();
+
+  return res.ok
+    ? data
+    : {
+        subscribed: false,
+        cancel_at_period_end: data.cancel_at_period_end,
+        renews_at: data.renews_at,
+      };
 }
 
 const FREE_FEATURES = [
@@ -45,7 +60,9 @@ const Check = ({ muted = false }: { muted?: boolean }) => (
 
 const SubscriptionPage = async () => {
   const subscription = await getSubscription();
+  console.log(subscription);
   const isPro = subscription.subscribed;
+  const isCancelling = subscription.cancel_at_period_end;
 
   return (
     <div className="flex flex-col">
@@ -83,15 +100,21 @@ const SubscriptionPage = async () => {
                 <span className="text-sm font-medium text-white">
                   MechanicAI Pro
                 </span>
-                <span className="rounded-md border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-xs text-emerald-400">
-                  Active
+                <span
+                  className={cn(
+                    "rounded-md border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-xs text-emerald-400",
+                    isCancelling &&
+                      "border-amber-500/20 bg-amber-500/10 text-amber-400",
+                  )}
+                >
+                  {isCancelling ? "Cancelling" : "Active"}
                 </span>
               </div>
               <span className="text-sm font-medium text-white">$7 / month</span>
             </div>
             {subscription.renews_at && (
               <p className="text-xs text-white/30">
-                {subscription.cancel_at_period_end
+                {isCancelling
                   ? `Cancels on ${new Date(subscription.renews_at).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}`
                   : `Renews on ${new Date(subscription.renews_at).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}`}
               </p>
@@ -184,7 +207,7 @@ const SubscriptionPage = async () => {
         </div>
       </Section>
 
-      {isPro && (
+      {isPro && !isCancelling && (
         <Section title="Danger zone">
           <div className="rounded-xl border border-red-500/15 bg-red-500/[0.04] p-4 flex items-center justify-between gap-4">
             <div>

@@ -5,4 +5,5 @@ export type User = {
   email: string;
   avatar: string;
   onboarding_done: boolean;
+  subscribed: boolean;
 };
