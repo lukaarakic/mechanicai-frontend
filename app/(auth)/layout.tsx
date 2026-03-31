@@ -7,7 +7,7 @@ function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="relative flex min-h-dvh flex-col items-center justify-center gap-6 px-4 py-12">
+    <main className="relative flex min-h-dvh flex-col items-center justify-center gap-6 px-4 py-12">
       <div
         className="pointer-events-none fixed inset-0 opacity-[0.03]"
         style={{
@@ -27,7 +27,7 @@ function Layout({
       </div>
 
       <OtherLinks />
-    </div>
+    </main>
   );
 }
 
