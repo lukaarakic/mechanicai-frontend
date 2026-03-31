@@ -4,10 +4,11 @@ import Button from "@/app/components/ui/Button";
 import Field from "@/app/components/ui/Field";
 import ErrorList from "@/app/components/ui/ErrorList";
 import AuthHeader from "@/app/components/AuthHeader";
-import { registerAction } from "@/app/lib/actions/auth";
+import { registerAction } from "@/app/lib/actions/auth/register";
 import { useActionState } from "react";
+import FormMessage from "@/app/components/ui/FormMessage";
 
-const RegisterClient = () => {
+const RegisterForm = () => {
   const [state, action, isPending] = useActionState(registerAction, {
     errors: null,
     success: false,
@@ -45,7 +46,7 @@ const RegisterClient = () => {
               label="Email"
               placeholder="yourname@example.com"
             />
-            <ErrorList errors={state.errors?.email} />
+            <FormMessage error={state.errors?.email} />
           </div>
 
           <div>
@@ -55,7 +56,7 @@ const RegisterClient = () => {
               label="Password"
               placeholder="Create a password"
             />
-            <ErrorList errors={state.errors?.password} />
+            <FormMessage error={state.errors?.password} />
           </div>
 
           <div>
@@ -65,10 +66,10 @@ const RegisterClient = () => {
               label="Confirm password"
               placeholder="Repeat your password"
             />
-            <ErrorList errors={state.errors?.confirmPassword} />
+            <FormMessage error={state.errors?.confirmPassword} />
           </div>
 
-          <ErrorList errors={state.errors?.general} />
+          <FormMessage error={state.errors?.general} />
 
           <Button className="mt-2 w-full" disabled={isPending}>
             {isPending ? "Creating account…" : "Create account"}
@@ -79,4 +80,4 @@ const RegisterClient = () => {
   );
 };
 
-export default RegisterClient;
+export default RegisterForm;

@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { getJWT } from "../get-jwt";
+import { getJWT } from "../../get-jwt";
 
 const createChatAction = async (carId: string, message: string) => {
   const token = await getJWT();

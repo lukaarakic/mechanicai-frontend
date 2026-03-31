@@ -3,7 +3,7 @@
 
 import { useState, useTransition } from "react";
 import Button from "@/app/components/ui/Button";
-import createChatAction from "@/app/lib/actions/create-chat";
+import createChatAction from "@/app/lib/actions/chat/create-chat";
 import { Car } from "@/app/types/car";
 
 const NewChatForm = ({ cars }: { cars: Car[] }) => {

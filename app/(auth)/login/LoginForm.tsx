@@ -2,14 +2,14 @@
 
 import Button from "@/app/components/ui/Button";
 import Field from "@/app/components/ui/Field";
-import ErrorList from "@/app/components/ui/ErrorList";
 import AuthHeader from "@/app/components/AuthHeader";
 import Link from "next/link";
 import { useActionState } from "react";
-import { loginAction } from "@/app/lib/actions/auth";
 import { useSearchParams } from "next/navigation";
+import { loginAction } from "@/app/lib/actions/auth/login";
+import FormMessage from "@/app/components/ui/FormMessage";
 
-const LoginClient = () => {
+const LoginForm = () => {
   const [state, action, isPending] = useActionState(loginAction, {
     errors: null,
   });
@@ -54,7 +54,7 @@ const LoginClient = () => {
             type="email"
             placeholder="yourname@example.com"
           />
-          <ErrorList errors={state.errors?.email} />
+          <FormMessage error={state.errors?.email} />
         </div>
 
         <div>
@@ -65,7 +65,8 @@ const LoginClient = () => {
             label="Password"
             placeholder="Enter your password"
           />
-          <ErrorList errors={state.errors?.password} />
+
+          <FormMessage error={state.errors?.password} />
         </div>
 
         <Link
@@ -75,9 +76,9 @@ const LoginClient = () => {
           Forgot password?
         </Link>
 
-        <ErrorList errors={state.errors?.general} />
+        <FormMessage error={state.errors?.general} />
 
-        <Button className="mt-2 w-full" type="submit" disabled={isPending}>
+        <Button className="w-full" type="submit" disabled={isPending}>
           {isPending ? "Logging in…" : "Log in"}
         </Button>
       </form>
@@ -85,4 +86,4 @@ const LoginClient = () => {
   );
 };
 
-export default LoginClient;
+export default LoginForm;

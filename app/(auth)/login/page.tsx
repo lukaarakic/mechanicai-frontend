@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import LoginClient from "./LoginClient";
+import LoginForm from "./LoginForm";
 
 export const metadata: Metadata = {
   title: "Log In | MechanicAI",
@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 };
 
 const LoginPage = () => {
-  return <LoginClient />;
+  return <LoginForm />;
 };
 
 export default LoginPage;

@@ -2,24 +2,34 @@
 
 import Button from "@/app/components/ui/Button";
 import ArrowLeft from "@/app/assets/icons/arrow-left.svg";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Textarea } from "@/app/components/ui/Textarea";
+import FormMessage from "@/app/components/ui/FormMessage";
+import { SendMessageState } from "@/app/types/chat";
 
 const MessageForm = ({
   chatId,
-  onSend,
   isPending,
+  serverError,
+  onSend,
 }: {
   chatId: string;
-  onSend: (content: string) => void;
   isPending: boolean;
+  serverError?: SendMessageState["error"];
+  onSend: (content: string) => void;
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [error, setError] = useState<string | undefined>();
 
   const handleSubmit = (e: React.FormEvent) => {
+    setError(undefined);
     e.preventDefault();
     const content = textareaRef.current?.value.trim();
     if (!content || isPending) return;
+    if (content.length < 10) {
+      setError("Content must be at least 10 characters.");
+      return;
+    }
     onSend(content);
     if (textareaRef.current) textareaRef.current.value = "";
   };
@@ -40,6 +50,11 @@ const MessageForm = ({
           <ArrowLeft className="rotate-90 w-5 h-5" style={{ fill: "#000" }} />
         </Button>
       </form>
+
+      {}
+      <FormMessage error={error} />
+      <FormMessage error={serverError?.content} />
+      <FormMessage error={serverError?.general} />
 
       <p className="text-center text-white/20 text-xs mt-3">
         MechanicAI can make mistakes. Always consult a professional.

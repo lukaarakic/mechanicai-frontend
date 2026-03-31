@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import RegisterClient from "./RegisterClient";
+import RegisterForm from "./RegisterForm";
 
 export const metadata: Metadata = {
   title: "Register | MechanicAI",
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 const RegisterPage = () => {
-  return <RegisterClient />;
+  return <RegisterForm />;
 };
 
 export default RegisterPage;

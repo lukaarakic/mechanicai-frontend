@@ -1,26 +1,31 @@
 "use server";
 
 import z from "zod";
-import { getJWT } from "../get-jwt";
+import { getJWT } from "../../get-jwt";
 import { revalidatePath } from "next/cache";
+import { SendMessageState } from "@/app/types/chat";
 
 const contentSchema = z.object({
-  content: z.string().min(10, "Content is required"),
+  content: z.string().min(10, "Content must be at least 10 characters."),
 });
 
 const sendMessageAction = async (
-  prevState: { data: any; error: any },
+  prevState: SendMessageState,
   formData: FormData,
 ) => {
   const content = formData.get("content");
   const chatId = formData.get("chatId");
 
-  const validatedData = contentSchema.safeParse({ content });
+  const parsedData = contentSchema.safeParse({ content });
 
-  if (!validatedData.success) {
+  if (!parsedData.success) {
     return {
       data: null,
-      error: z.prettifyError(validatedData.error),
+      error: {
+        content:
+          parsedData.error.flatten().fieldErrors.content?.[0] ||
+          "Content is required",
+      },
     };
   }
 
@@ -38,13 +43,19 @@ const sendMessageAction = async (
   });
 
   if (!res.ok) {
+    const errorData = await res.json();
+
     return {
       data: null,
-      error: `API error: ${res.status} ${res.statusText}`,
+      error: {
+        general:
+          errorData.message || "Failed to send message. Please try again.",
+      },
     };
   }
 
   const data = await res.json();
+  console.log("Message sent successfully", data);
 
   revalidatePath(`/chat/${chatId}`);
 

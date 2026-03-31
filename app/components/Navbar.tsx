@@ -12,8 +12,8 @@ import WhiteLogo from "@/app/assets/logo-white.svg";
 import HomeIcon from "@/app/assets/icons/home-icon.svg";
 import HistoryIcon from "@/app/assets/icons/history-icon.svg";
 import SettingsIcon from "@/app/assets/icons/settings-icon.svg";
-import { logoutAction } from "../lib/actions/auth";
 import { User } from "../types/user";
+import { logoutAction } from "@/app/lib/actions/auth/logout";
 
 interface NavbarProps {
   user: User;

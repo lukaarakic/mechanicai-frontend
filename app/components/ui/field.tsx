@@ -8,6 +8,7 @@ interface FieldProps {
   value?: string | number;
   placeholder?: string;
   className?: string;
+  boxClassName?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -18,11 +19,12 @@ const Field: FC<FieldProps & InputHTMLAttributes<HTMLInputElement>> = ({
   value,
   placeholder,
   className = "",
+  boxClassName = "",
   onChange,
   ...props
 }) => {
   return (
-    <div className="flex w-full flex-col gap-1.5">
+    <div className={`flex w-full flex-col gap-1.5 ${boxClassName}`}>
       {label && (
         <label
           htmlFor={name}

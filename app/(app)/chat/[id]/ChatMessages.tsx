@@ -4,24 +4,12 @@ import Image from "next/image";
 import Markdown from "react-markdown";
 import MessageForm from "./MessageForm";
 import LogoWhite from "@/app/assets/logo-white.svg";
-import { useOptimistic, useTransition } from "react";
-import sendMessageAction from "@/app/lib/actions/chat";
-
-interface Message {
-  id: string;
-  content: string;
-  role: "user" | "assistant";
-}
-
-interface ChatMessagesProps {
-  chatId: string;
-  messages: Message[];
-  user: {
-    avatar: string;
-  };
-}
+import { useOptimistic, useState, useTransition } from "react";
+import sendMessageAction from "@/app/lib/actions/chat/send-message";
+import { ChatMessagesProps, Message, SendMessageState } from "@/app/types/chat";
 
 const ChatMessages = ({ chatId, messages, user }: ChatMessagesProps) => {
+  const [serverError, setServerError] = useState<SendMessageState["error"]>();
   const [isPending, startTransition] = useTransition();
   const [optimisticMessages, addOptimisticMessages] = useOptimistic(
     messages,
@@ -30,8 +18,15 @@ const ChatMessages = ({ chatId, messages, user }: ChatMessagesProps) => {
 
   const handleSend = (content: string) => {
     startTransition(async () => {
-      addOptimisticMessages({ id: crypto.randomUUID(), content, role: "user" });
-      await sendMessageAction(
+      setServerError(undefined);
+
+      addOptimisticMessages({
+        id: crypto.randomUUID(),
+        content,
+        role: "user",
+      });
+
+      const data = await sendMessageAction(
         { data: null, error: null },
         (() => {
           const fd = new FormData();
@@ -40,6 +35,11 @@ const ChatMessages = ({ chatId, messages, user }: ChatMessagesProps) => {
           return fd;
         })(),
       );
+
+      if (data.error) {
+        setServerError(data.error);
+        return;
+      }
     });
   };
 
@@ -81,7 +81,7 @@ const ChatMessages = ({ chatId, messages, user }: ChatMessagesProps) => {
         ),
       )}
 
-      {isPending && (
+      {isPending && !serverError && (
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
             <div className="flex items-center justify-center h-8 w-8 rounded-lg border border-white/10 bg-white/5">
@@ -99,7 +99,12 @@ const ChatMessages = ({ chatId, messages, user }: ChatMessagesProps) => {
         </div>
       )}
 
-      <MessageForm chatId={chatId} onSend={handleSend} isPending={isPending} />
+      <MessageForm
+        chatId={chatId}
+        onSend={handleSend}
+        isPending={isPending}
+        serverError={serverError}
+      />
     </>
   );
 };

@@ -31,13 +31,6 @@ export async function resetPasswordAction(
     };
   }
 
-  console.log(
-    "Resetting password with data:",
-    parsedData.data,
-    "and key:",
-    key,
-  );
-
   const response = await fetch(`${process.env.API_URL}/reset-password`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
