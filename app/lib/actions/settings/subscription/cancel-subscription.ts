@@ -20,6 +20,5 @@ export async function cancelSubscriptionAction() {
     throw new Error("Failed to cancel subscription");
   }
 
-  console.log("Subscription cancelled");
   revalidatePath("/settings/subscription");
 }

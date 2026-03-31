@@ -10,3 +10,16 @@ export type OnboardingData = {
   profile: ProfileData;
   car: Car;
 };
+
+type OnboardingFields =
+  | "first_name"
+  | "last_name"
+  | "make"
+  | "model"
+  | "year"
+  | "size"
+  | "power";
+
+export type OnboardingErrorState = Partial<Record<OnboardingFields, string>> & {
+  general?: string;
+};

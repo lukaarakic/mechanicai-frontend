@@ -13,6 +13,8 @@ const DeleteAccount = () => {
     success: false,
   });
 
+  console.log(state);
+
   return (
     <div className="rounded-xl border border-red-500/15 bg-red-500/4 p-4 flex flex-col gap-4">
       <div className="flex items-center justify-between gap-4">
@@ -41,7 +43,7 @@ const DeleteAccount = () => {
             type="password"
             placeholder="••••••••"
           />
-          <FormMessage error={state.errors.general} />
+          <FormMessage error={state.errors.password} />
           <div className="flex gap-2">
             <Button variant="destructive" disabled={isPending}>
               {isPending ? "Deleting..." : "Confirm delete"}

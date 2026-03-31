@@ -57,7 +57,7 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
 
   return (
     <>
-      <nav className="py-20 fixed left-0 top-0 z-50 hidden h-dvh w-16 flex-col items-center gap-1 border-r border-white/[0.06] bg-light-black py-5 md:flex">
+      <nav className="py-20 fixed left-0 top-0 z-50 hidden h-dvh w-16 flex-col items-center gap-1 border-r border-white/6 bg-light-black md:flex">
         <Link href="/" className="mb-4 flex items-center justify-center">
           <WhiteLogo className="h-7 w-7" />
         </Link>
@@ -71,7 +71,7 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
             "mb-3 flex items-center justify-center cursor-pointer rounded-xl p-2.5 transition-all",
             isActive("/chat")
               ? "bg-white text-black"
-              : "border border-white/10 bg-white/[0.04] text-white/50 hover:border-white/20 hover:bg-white/[0.08] hover:text-white",
+              : "border border-white/10 bg-white/4 text-white/50 hover:border-white/20 hover:bg-white/8 hover:text-white",
           )}
         >
           <NewChatIcon className="h-20 w-20 fill-current" />
@@ -101,11 +101,11 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
         <Popover
           containerClassName="z-[60]"
           isOpen={isPopoverOpen}
-          positions={["right", "bottom"]}
+          positions={["bottom", "right", "left"]}
           align="end"
           content={
             <div className="ml-3 min-w-56 rounded-xl border border-white/10 bg-light-black p-4 shadow-2xl shadow-black/60">
-              <div className="mb-3 flex items-center gap-3 border-b border-white/[0.06] pb-3">
+              <div className="mb-3 flex items-center gap-3 border-b border-white/6 pb-3">
                 <Image
                   src={user.avatar}
                   alt="avatar"
@@ -144,7 +144,7 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
               <div className="flex flex-col gap-1.5">
                 <Link
                   href="/settings/cars"
-                  className="cursor-pointer rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1.5 text-center text-xs text-white/60 transition-all hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
+                  className="cursor-pointer rounded-lg border border-white/10 bg-white/4 px-3 py-1.5 text-center text-xs text-white/60 transition-all hover:border-white/20 hover:bg-white/8 hover:text-white"
                 >
                   Manage cars
                 </Link>
@@ -181,7 +181,9 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
         </Popover>
       </nav>
 
-      <nav className="fixed bottom-0 left-0 z-50 flex w-full items-center justify-around border-t border-white/[0.06] bg-light-black/90 px-4 py-3 backdrop-blur-md md:hidden">
+      {/* MOBILE NAVIGATION */}
+
+      <nav className="fixed bottom-0 left-0 z-50 flex w-full items-center justify-around border-t border-white/6 bg-light-black/90 px-4 py-3 backdrop-blur-md md:hidden">
         <NavLink href="/" icon={HomeIcon} active={isActive("/")} label="Home" />
         <NavLink
           href="/history"
@@ -191,7 +193,7 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
         />
 
         <Link
-          href="/sessions/1"
+          href="/chat"
           aria-label="New chat"
           className="flex items-center justify-center rounded-xl border border-white/15 bg-white/10 p-3 text-white transition-all active:scale-95"
         >
@@ -211,7 +213,7 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
           aria-label="Profile"
         >
           <Image
-            src={user.avatar}
+            src={user?.avatar}
             alt="User avatar"
             width={32}
             height={32}

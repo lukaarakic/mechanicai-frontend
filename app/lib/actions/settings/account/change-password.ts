@@ -2,7 +2,7 @@
 
 import z from "zod";
 import { revalidatePath } from "next/cache";
-import { PasswordSchema } from "@/app/lib/user-validation";
+import { PasswordSchema } from "@/app/lib/validations/user-validation";
 import { getJWT } from "@/app/lib/get-jwt";
 
 const UpdatePasswordSchema = z

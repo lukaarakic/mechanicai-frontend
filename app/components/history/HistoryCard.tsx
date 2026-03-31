@@ -46,9 +46,9 @@ const HistoryCard: FC<HistoryCardProps> = ({
   return (
     <Link
       href={`/chat/${id}`}
-      className="group relative flex w-full flex-col rounded-2xl border border-white/8 bg-white/[0.02] p-4 transition-all duration-200 hover:border-white/15 hover:bg-white/[0.05]"
+      className="relative flex w-full flex-col rounded-2xl border border-white/8 bg-white/2 p-4 transition-all duration-200 hover:border-white/15 hover:bg-white/5"
     >
-      <div className="absolute inset-x-0 top-0 h-px rounded-t-2xl bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-px rounded-t-2xl bg-linear-to-r from-transparent via-white/10 to-transparent" />
 
       <p className="mb-6 line-clamp-2 text-sm font-medium leading-snug text-white/90">
         {title ?? "Diagnostic session"}

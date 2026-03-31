@@ -2,14 +2,16 @@
 
 import { Dispatch, SetStateAction } from "react";
 import Field from "../ui/Field";
-import { OnboardingData } from "@/app/types/onboarding";
+import { OnboardingData, OnboardingErrorState } from "@/app/types/onboarding";
+import FormMessage from "../ui/FormMessage";
 
 interface CarFormProps {
   data: OnboardingData;
   setData: Dispatch<SetStateAction<OnboardingData>>;
+  errors?: OnboardingErrorState;
 }
 
-const CarForm = ({ data, setData }: CarFormProps) => {
+const CarForm = ({ data, setData, errors }: CarFormProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
     setData((prev) => ({
@@ -31,54 +33,69 @@ const CarForm = ({ data, setData }: CarFormProps) => {
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <Field
-          name="make"
-          type="text"
-          label="Make"
-          placeholder="Toyota"
-          value={data.car.make}
-          onChange={handleChange}
-        />
-        <Field
-          name="model"
-          type="text"
-          label="Model"
-          placeholder="Corolla"
-          value={data.car.model}
-          onChange={handleChange}
-        />
+        <div className="flex flex-col gap-1.5">
+          <Field
+            name="make"
+            type="text"
+            label="Make"
+            placeholder="Toyota"
+            value={data.car.make}
+            onChange={handleChange}
+          />
+          <FormMessage error={errors?.make} />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <Field
+            name="model"
+            type="text"
+            label="Model"
+            placeholder="Corolla"
+            value={data.car.model}
+            onChange={handleChange}
+          />
+          <FormMessage error={errors?.model} />
+        </div>
       </div>
 
-      <Field
-        name="year"
-        type="number"
-        label="Year"
-        placeholder="2018"
-        value={data.car.year}
-        onChange={handleChange}
-        min="1900"
-        max={new Date().getFullYear()}
-      />
+      <div className="flex flex-col gap-1.5">
+        <Field
+          name="year"
+          type="number"
+          label="Year"
+          placeholder="2018"
+          value={data.car.year}
+          onChange={handleChange}
+          min="1900"
+          max={new Date().getFullYear()}
+        />
+        <FormMessage error={errors?.year} />
+      </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <Field
-          name="size"
-          type="number"
-          label="Engine size (cc)"
-          placeholder="1998"
-          value={data.car.size}
-          onChange={handleChange}
-          min="0"
-        />
-        <Field
-          name="power"
-          type="number"
-          label="Power (hp)"
-          placeholder="150"
-          value={data.car.power}
-          onChange={handleChange}
-          min="0"
-        />
+        <div className="flex flex-col gap-1.5">
+          <Field
+            name="size"
+            type="number"
+            label="Engine size (cc)"
+            placeholder="1998"
+            value={data.car.size}
+            onChange={handleChange}
+            min="0"
+          />
+          <FormMessage error={errors?.size} />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <Field
+            name="power"
+            type="number"
+            label="Power (hp)"
+            placeholder="150"
+            value={data.car.power}
+            onChange={handleChange}
+            min="0"
+          />
+          <FormMessage error={errors?.power} />
+        </div>
       </div>
     </form>
   );

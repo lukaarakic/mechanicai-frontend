@@ -1,25 +1,12 @@
 "use server";
 
+import { CarSchema } from "@/app/lib/validations/car-validation";
 import { getJWT } from "@/app/lib/get-jwt";
 import { revalidatePath } from "next/cache";
 import z from "zod";
 
-const AddCarSchema = z.object({
-  make: z.string().min(1, "Make is required").max(50),
-  model: z.string().min(1, "Model is required").max(50),
-  year: z.coerce
-    .number()
-    .min(1900, "Year must be a valid year")
-    .max(new Date().getFullYear()),
-  size: z.coerce
-    .number()
-    .min(50, "Engine size must be a positive number")
-    .max(10000),
-  power: z.coerce.number().min(1, "Power must be a positive number").max(2000),
-});
-
 export type AddCarState = {
-  errors: Partial<Record<keyof z.infer<typeof AddCarSchema>, string>> & {
+  errors: Partial<Record<keyof z.infer<typeof CarSchema>, string>> & {
     general?: string;
   };
   success: boolean;
@@ -31,7 +18,7 @@ export async function addCarAction(
 ): Promise<AddCarState> {
   const token = await getJWT();
 
-  const parsedData = AddCarSchema.safeParse(
+  const parsedData = CarSchema.safeParse(
     Object.fromEntries(formData.entries()),
   );
 
@@ -63,7 +50,6 @@ export async function addCarAction(
 
   if (!res.ok) {
     const error = await res.json();
-    console.log("Error adding car:", error);
     return {
       errors: {
         general:

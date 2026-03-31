@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import z from "zod";
-import { PasswordSchema } from "@/app/lib/user-validation";
+import { PasswordSchema } from "@/app/lib/validations/user-validation";
 import { getJWT } from "@/app/lib/get-jwt";
 
 const DeleteAccountSchema = z.object({

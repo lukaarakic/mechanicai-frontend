@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Button from "@/app/components/ui/Button";
 import ErrorList from "@/app/components/ui/ErrorList";
 import Field from "@/app/components/ui/Field";
-import { EmailSchema } from "@/app/lib/user-validation";
+import { EmailSchema } from "@/app/lib/validations/user-validation";
 import { z } from "zod";
 
 export const metadata: Metadata = {

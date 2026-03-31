@@ -17,7 +17,6 @@ const SubscribeButton = () => {
       token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN!,
       eventCallback: function (data) {
         if (data.name == "checkout.completed") {
-          console.log("Checkout completed:", data);
           setTimeout(() => {
             router.refresh();
           }, 2000);

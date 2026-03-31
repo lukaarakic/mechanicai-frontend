@@ -38,6 +38,7 @@ const RemoveCarForm = ({ car }: { car: Car }) => {
           </p>
         </div>
       </div>
+
       <div className="flex items-center gap-3">
         {confirmed ? (
           <>
@@ -68,7 +69,7 @@ const RemoveCarForm = ({ car }: { car: Car }) => {
           </Button>
         )}
       </div>
-      <FormMessage error={error as string} />
+      {error && <FormMessage error={error as string} />}
     </div>
   );
 };

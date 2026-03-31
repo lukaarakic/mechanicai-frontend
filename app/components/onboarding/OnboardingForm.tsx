@@ -5,7 +5,7 @@ import ProfileForm from "./ProfileForm";
 import CarForm from "./CarForm";
 import Button from "../ui/Button";
 import { onboardingAction } from "@/app/lib/actions/onboarding";
-import { OnboardingData } from "@/app/types/onboarding";
+import { OnboardingData, OnboardingErrorState } from "@/app/types/onboarding";
 
 const OnboardingForm = () => {
   const [data, setData] = useState<OnboardingData>({
@@ -15,6 +15,7 @@ const OnboardingForm = () => {
       avatar: "",
     },
     car: {
+      id: "",
       make: "",
       model: "",
       year: "",
@@ -24,32 +25,51 @@ const OnboardingForm = () => {
   });
 
   const [step, setStep] = useState(0);
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState<OnboardingErrorState>({});
 
-  const handleStepChange = () => {
-    setError("");
+  const handleStepChange = async () => {
+    setErrors({});
 
     if (step === 0) {
-      if (
+      const profileValid =
         data.profile.first_name.length > 2 &&
         data.profile.last_name.length > 2 &&
-        data.profile.avatar.length > 2
-      ) {
+        data.profile.avatar.length > 2;
+
+      if (profileValid) {
         setStep((prev) => prev + 1);
       } else {
-        setError("Please fill out all fields before continuing.");
+        setErrors({ general: "Please fill out all fields before continuing." });
       }
-    } else if (step === 1) {
-      if (
+      return;
+    }
+
+    if (step === 1) {
+      const carValid =
         data.car.make &&
         data.car.model &&
         data.car.year &&
         data.car.size &&
-        data.car.power
-      ) {
-        onboardingAction(data);
-      } else {
-        setError("Please fill out all car fields before continuing.");
+        data.car.power;
+
+      if (!carValid) {
+        setErrors({
+          general: "Please fill out all car fields before continuing.",
+        });
+        return;
+      }
+
+      const result = await onboardingAction(data);
+
+      if (result.success) return;
+
+      if ("errors" in result && result.errors) {
+        const errors = result.errors as OnboardingErrorState;
+        setErrors(errors);
+
+        if (errors.first_name || errors.last_name) {
+          setStep(0);
+        }
       }
     }
   };
@@ -74,16 +94,30 @@ const OnboardingForm = () => {
             </p>
           </div>
 
-          {step === 0 && <ProfileForm data={data} setData={setData} />}
-          {step === 1 && <CarForm data={data} setData={setData} />}
+          {step === 0 && (
+            <ProfileForm data={data} errors={errors} setData={setData} />
+          )}
+          {step === 1 && (
+            <CarForm errors={errors} data={data} setData={setData} />
+          )}
 
-          <Button
-            onClick={handleStepChange}
-            className="mt-20 mb-10 cursor-pointer w-full rounded-lg bg-white py-2.5 text-sm font-semibold text-black transition-all hover:bg-white/90 active:scale-[0.98]"
-          >
-            {step === 1 ? "Finish" : "Continue →"}
-          </Button>
-          <p className="text-sm text-red-400">{error}</p>
+          <div className="flex gap-4 mt-8">
+            {step === 1 && (
+              <Button
+                onClick={() => setStep((prev) => prev - 1)}
+                className="mt-20 mb-10 cursor-pointer w-full rounded-lg bg-white py-2.5 text-sm font-semibold text-black transition-all hover:bg-white/90 active:scale-[0.98]"
+              >
+                Go Back
+              </Button>
+            )}
+            <Button
+              onClick={handleStepChange}
+              className="mt-20 mb-10 cursor-pointer w-full rounded-lg bg-white py-2.5 text-sm font-semibold text-black transition-all hover:bg-white/90 active:scale-[0.98]"
+            >
+              {step === 1 ? "Finish" : "Continue →"}
+            </Button>
+          </div>
+          <p className="text-sm text-red-400">{errors?.general}</p>
         </div>
       </div>
     </div>

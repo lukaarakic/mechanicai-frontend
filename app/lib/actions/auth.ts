@@ -1,7 +1,7 @@
 "use server";
 
 import z, { email } from "zod";
-import { LoginSchema, RegisterSchema } from "../user-validation";
+import { LoginSchema, RegisterSchema } from "../validations/user-validation";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 

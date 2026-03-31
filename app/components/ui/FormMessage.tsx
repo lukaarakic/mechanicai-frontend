@@ -5,13 +5,15 @@ type FormMessageProps = {
 };
 
 const FormMessage = ({ error, success, className }: FormMessageProps) => {
-  if (error)
-    return <p className={`text-sm text-red-500 ${className || ""}`}>{error}</p>;
-  if (success)
-    return (
-      <p className={`text-sm text-green-500 ${className || ""}`}>{success}</p>
-    );
-  return null;
+  return (
+    <div className="relative h-4">
+      <p
+        className={`absolute text-sm ${error ? "text-red-500" : ""} ${success ? "text-green-500" : ""} ${className || ""}`}
+      >
+        {error ?? success}
+      </p>
+    </div>
+  );
 };
 
 export default FormMessage;

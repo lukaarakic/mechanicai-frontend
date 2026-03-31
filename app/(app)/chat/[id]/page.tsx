@@ -34,8 +34,6 @@ const Chat = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   const initialMessages = data.messages || [];
 
-  console.log("Chat data:", data);
-
   return (
     <div className="flex flex-col h-full max-w-3xl mx-auto w-full px-4 lg:px-8">
       <div className="sticky top-0 z-10 flex items-center gap-3 py-4 bg-black/80 backdrop-blur-sm border-b border-white/[0.06]">

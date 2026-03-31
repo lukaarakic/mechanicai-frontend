@@ -4,16 +4,20 @@ import Field from "../ui/Field";
 import Image from "next/image";
 import { randomSeed } from "@/app/utils/random-seed";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { OnboardingData } from "@/app/types/onboarding";
+import { OnboardingData, OnboardingErrorState } from "@/app/types/onboarding";
+import FormMessage from "../ui/FormMessage";
 
 interface ProfileFormProps {
   data: OnboardingData;
   setData: Dispatch<SetStateAction<OnboardingData>>;
+  errors?: OnboardingErrorState;
 }
 
-const ProfileForm = ({ data, setData }: ProfileFormProps) => {
+const ProfileForm = ({ data, setData, errors }: ProfileFormProps) => {
   const [avatarSeed, setAvatarSeed] = useState(() => {
-    if (typeof window !== "undefined") return randomSeed();
+    if (typeof window !== "undefined" && !data.profile.avatar)
+      return randomSeed();
+
     return "";
   });
 
@@ -31,6 +35,7 @@ const ProfileForm = ({ data, setData }: ProfileFormProps) => {
   };
 
   useEffect(() => {
+    if (data.profile.avatar) return;
     setData((prevData) => ({
       ...prevData,
       profile: {
@@ -93,6 +98,8 @@ const ProfileForm = ({ data, setData }: ProfileFormProps) => {
             value={data.profile.first_name}
             onChange={handleDataChange}
           />
+
+          <FormMessage error={errors?.first_name} />
         </div>
         <div className="flex flex-col gap-1.5">
           <Field
@@ -103,6 +110,7 @@ const ProfileForm = ({ data, setData }: ProfileFormProps) => {
             onChange={handleDataChange}
             placeholder="Lovelace"
           />
+          <FormMessage error={errors?.last_name} />
         </div>
       </div>
     </form>
