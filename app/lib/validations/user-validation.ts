@@ -26,3 +26,16 @@ export const RegisterSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
   });
+
+export const ResetPasswordSchema = z
+  .object({
+    password: PasswordSchema,
+    "password-confirm": PasswordSchema,
+  })
+  .refine((data) => data.password === data["password-confirm"], {
+    message: "Passwords do not match",
+  });
+
+export const ForgotPasswordSchema = z.object({
+  email: EmailSchema,
+});

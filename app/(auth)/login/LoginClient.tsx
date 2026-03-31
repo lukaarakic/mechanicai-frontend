@@ -15,6 +15,9 @@ const LoginClient = () => {
   });
   const searchParams = useSearchParams();
   const verified = searchParams.get("verified");
+  const resetPassword = searchParams.get("reset") === "true";
+
+  console.log(resetPassword);
 
   return (
     <>
@@ -27,6 +30,14 @@ const LoginClient = () => {
         <div className="mb-4 flex items-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-2.5 text-sm text-emerald-400">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
           Email verified successfully!
+        </div>
+      )}
+
+      {resetPassword && (
+        <div className="mb-4 flex items-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-2.5 text-sm text-emerald-400">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shrink-0" />
+          Password reset successfully! You can now log in with your new
+          password.
         </div>
       )}
 
