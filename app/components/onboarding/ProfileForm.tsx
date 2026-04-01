@@ -1,11 +1,11 @@
 "use client";
 
-import Field from "../ui/Field";
+import Field from "@/app/components/ui/Field";
 import Image from "next/image";
 import { randomSeed } from "@/app/utils/random-seed";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { OnboardingData, OnboardingErrorState } from "@/app/types/onboarding";
-import FormMessage from "../ui/FormMessage";
+import FormMessage from "@/app/components/ui/FormMessage";
 
 interface ProfileFormProps {
   data: OnboardingData;

@@ -17,8 +17,6 @@ const LoginForm = () => {
   const verified = searchParams.get("verified");
   const resetPassword = searchParams.get("reset") === "true";
 
-  console.log(resetPassword);
-
   return (
     <>
       <AuthHeader
