@@ -9,7 +9,7 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Paddle](https://img.shields.io/badge/Paddle-Billing-0052CC?style=flat-square)](https://paddle.com/)
 
-[Live Demo](https://mechanicai.lukarakic.me) · [Backend Repo](https://github.com/lukarakic/mechanicai-backend) · [Report Bug](mailto:admin@lukarakic.me)
+[Live Demo](https://mechanicai.lukarakic.me) · [Backend Repo](https://github.com/lukaarakic/mechanicai-backend) · [Report Bug](mailto:admin@lukarakic.me)
 
 </div>
 
