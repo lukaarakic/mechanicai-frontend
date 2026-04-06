@@ -53,7 +53,7 @@ Browser
 
 ### Diagnostic Chat
 - Start a new diagnostic session by selecting a vehicle and describing the problem
-- Messages streamed progressively through the 3-step pipeline on the backend
+- Messages streamed progressively through the 4-step pipeline on the backend
 - Full chat history with past diagnostic sessions, browsable from the sidebar
 - `useTransition` on message send for optimistic loading state
 
