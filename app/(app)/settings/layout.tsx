@@ -8,7 +8,7 @@ const links = [
 
 const SettingsLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="w-full px-6 py-10 mt-40">
+    <div className="mt-10 mb-24 w-full px-4 py-8 sm:mt-32 sm:px-6 sm:py-10 lg:mt-40">
       <div className="mx-auto max-w-4xl">
         <div className="mb-8">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1">
@@ -17,7 +17,7 @@ const SettingsLayout = ({ children }: { children: React.ReactNode }) => {
               Preferences
             </span>
           </div>
-          <h1 className="text-2xl font-semibold tracking-tight text-white">
+          <h1 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
             Settings
           </h1>
           <p className="mt-1.5 text-sm text-white/40">
@@ -25,9 +25,9 @@ const SettingsLayout = ({ children }: { children: React.ReactNode }) => {
           </p>
         </div>
 
-        <div className="flex gap-6">
-          <aside className="w-48 shrink-0">
-            <nav className="flex flex-col gap-1">
+        <div className="flex flex-col gap-4 lg:flex-row lg:gap-6">
+          <aside className="w-full shrink-0 lg:w-48">
+            <nav className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 lg:mx-0 lg:flex-col lg:gap-1 lg:overflow-visible lg:px-0 lg:pb-0">
               {links.map((link) => (
                 <SettingsLink key={link.href} href={link.href}>
                   {link.label}
@@ -36,7 +36,7 @@ const SettingsLayout = ({ children }: { children: React.ReactNode }) => {
             </nav>
           </aside>
 
-          <div className="flex-1 min-w-0 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8">
+          <div className="min-w-0 flex-1 rounded-2xl border border-white/6 bg-white/2 p-4 sm:p-6 lg:p-8">
             {children}
           </div>
         </div>

@@ -45,8 +45,8 @@ const SubscriptionPage = async () => {
 
   return (
     <div className="flex flex-col">
-      <div className="mb-8 pb-6 border-b border-white/[0.06]">
-        <div className="flex items-center justify-between">
+      <div className="mb-8 border-b border-white/6 pb-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-base font-medium text-white">Subscription</p>
             <p className="text-sm text-white/40 mt-0.5">
@@ -54,7 +54,7 @@ const SubscriptionPage = async () => {
             </p>
           </div>
           <span
-            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium border ${
+            className={`inline-flex w-fit items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium border ${
               isPro
                 ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-400"
                 : "border-white/10 bg-white/5 text-white/40"
@@ -73,9 +73,9 @@ const SubscriptionPage = async () => {
           title="Current plan"
           description="Your active subscription details."
         >
-          <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
+          <div className="flex flex-col gap-3 rounded-xl border border-white/6 bg-white/2 p-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="text-sm font-medium text-white">
                   MechanicAI Pro
                 </span>
@@ -89,7 +89,9 @@ const SubscriptionPage = async () => {
                   {isCancelling ? "Cancelling" : "Active"}
                 </span>
               </div>
-              <span className="text-sm font-medium text-white">$7 / month</span>
+              <span className="self-start text-sm font-medium text-white sm:self-auto">
+                $7 / month
+              </span>
             </div>
             {subscription.renews_at && (
               <p className="text-xs text-white/30">
@@ -110,12 +112,12 @@ const SubscriptionPage = async () => {
             : "Unlock unlimited diagnostics and more."
         }
       >
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           <div
             className={`relative flex flex-col gap-4 rounded-xl border p-5 ${
               !isPro
-                ? "border-white/15 bg-white/[0.03]"
-                : "border-white/[0.06] bg-white/[0.01] opacity-60"
+                ? "border-white/15 bg-white/3"
+                : "border-white/6 bg-white/1 opacity-60"
             }`}
           >
             <div>
@@ -143,12 +145,12 @@ const SubscriptionPage = async () => {
           <div
             className={`relative flex flex-col gap-4 rounded-xl border p-5 ${
               isPro
-                ? "border-emerald-500/20 bg-emerald-500/[0.04]"
-                : "border-white/15 bg-white/[0.03]"
+                ? "border-emerald-500/20 bg-emerald-500/4"
+                : "border-white/15 bg-white/3"
             }`}
           >
             {!isPro && (
-              <div className="absolute -top-px left-4 right-4 h-px bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent" />
+              <div className="absolute -top-px left-4 right-4 h-px bg-linear-to-r from-transparent via-emerald-400/40 to-transparent" />
             )}
             <div>
               <div className="flex items-center gap-2">
@@ -188,7 +190,7 @@ const SubscriptionPage = async () => {
 
       {isPro && !isCancelling && (
         <Section title="Danger zone">
-          <div className="rounded-xl border border-red-500/15 bg-red-500/[0.04] p-4 flex items-center justify-between gap-4">
+          <div className="flex flex-col items-start justify-between gap-4 rounded-xl border border-red-500/15 bg-red-500/4 p-4 sm:flex-row sm:items-center">
             <div>
               <p className="text-sm font-medium text-red-400">
                 Cancel subscription
