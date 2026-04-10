@@ -4,6 +4,7 @@ import ArrowLeft from "@/app/assets/icons/arrow-left.svg";
 import { getJWT } from "@/app/lib/get-jwt";
 import { getUser } from "@/app/lib/get-user";
 import ChatMessages from "./ChatMessages";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Chat | MechanicAI",
@@ -23,11 +24,7 @@ const Chat = async ({ params }: { params: Promise<{ id: string }> }) => {
   });
 
   if (!res.ok) {
-    return (
-      <div>
-        Error loading chat: {res.status} {res.statusText}
-      </div>
-    );
+    notFound();
   }
 
   const data = await res.json();

@@ -39,7 +39,6 @@ export async function resetPasswordAction(
 
   if (!response.ok) {
     const error = await response.json();
-    console.log("Reset password error:", error);
     return {
       errors: {
         general: error.error || "Failed to reset password",

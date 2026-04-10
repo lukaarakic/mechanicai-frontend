@@ -55,8 +55,6 @@ const sendMessageAction = async (
   }
 
   const data = await res.json();
-  console.log("Message sent successfully", data);
-
   revalidatePath(`/chat/${chatId}`);
 
   return {

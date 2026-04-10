@@ -58,7 +58,6 @@ export async function updatePasswordAction(
   });
 
   if (!res.ok) {
-    console.error(await res.json());
     return { errors: { general: "Failed to update password" }, success: false };
   }
 

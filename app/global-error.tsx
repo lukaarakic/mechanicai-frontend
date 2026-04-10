@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
-import "@/app/globals.css";
 import WhiteLogo from "@/app/assets/logo-white.svg";
+// @ts-expect-error - false positive
+import "@/app/globals.css";
 
 export default function Error({
   error,
@@ -44,7 +45,7 @@ export default function Error({
                   home.
                 </p>
 
-                {error.message && (
+                {error.message && process.env.NODE_ENV === "development" && (
                   <div className="w-full rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3 text-left">
                     <code className="text-sm text-red-400/80">
                       {error.message}
@@ -53,12 +54,12 @@ export default function Error({
                 )}
 
                 <div className="flex items-center gap-3">
-                  <a
+                  <Link
                     href="/"
                     className="rounded-xl border border-white/10 bg-white/[0.05] px-5 py-2.5 text-sm font-medium text-white/80 transition hover:bg-white/[0.08] hover:text-white"
                   >
                     Go home
-                  </a>
+                  </Link>
                   <button
                     onClick={reset}
                     className="cursor-pointer rounded-xl bg-white px-5 py-2.5 text-sm font-medium text-black transition hover:bg-white/90"

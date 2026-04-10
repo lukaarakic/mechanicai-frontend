@@ -12,7 +12,12 @@ const Verify = async ({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) => {
   const params = await searchParams;
-  const verificationKey = params["key"];
+  const rawKey = params["key"];
+  const verificationKey = typeof rawKey === "string" ? rawKey.trim() : ""; // ← always string
+
+  if (!/^[A-Za-z0-9_-]{20,200}$/.test(verificationKey)) {
+    redirect("/login?verified=invalid");
+  }
 
   const response = await fetch(`${process.env.API_URL}/verify-account`, {
     method: "POST",

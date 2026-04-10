@@ -26,9 +26,11 @@ export default function Error({
           </p>
         </div>
 
-        <code className="w-full rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3 text-left text-xs text-red-400">
-          {error?.message}
-        </code>
+        {error?.message && process.env.NODE_ENV === "development" && (
+          <code className="w-full rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3 text-left text-xs text-red-400">
+            {error.message}
+          </code>
+        )}
 
         <div className="flex items-center gap-3">
           <Button onClick={reset}>Try again</Button>

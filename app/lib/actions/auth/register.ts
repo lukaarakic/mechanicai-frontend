@@ -52,7 +52,6 @@ export async function registerAction(
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.log("Registration failed", errorData);
       const [field, message] = errorData["field-error"] || [];
 
       return {
