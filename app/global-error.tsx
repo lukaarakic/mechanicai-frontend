@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { useEffect } from "react";
 import WhiteLogo from "@/app/assets/logo-white.svg";
-// @ts-expect-error - false positive
-import "@/app/globals.css";
+import "./globals.css";
 
 export default function Error({
   error,
