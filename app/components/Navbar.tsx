@@ -45,7 +45,8 @@ const NavLink = ({
 );
 
 const Navbar: FC<NavbarProps> = ({ user }) => {
-  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [isDesktopPopoverOpen, setIsDesktopPopoverOpen] = useState(false);
+  const [isMobilePopoverOpen, setIsMobilePopoverOpen] = useState(false);
   const pathname = usePathname();
 
   const isActive = (href: string) => {
@@ -54,6 +55,72 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
   };
 
   const isSubscribed = user.subscribed;
+
+  const popoverContent = (
+    offsetClassName: string,
+    onActionClick: () => void,
+  ) => (
+    <div
+      className={cn(
+        "min-w-56 rounded-xl border border-white/10 bg-light-black p-4 shadow-2xl shadow-black/60",
+        offsetClassName,
+      )}
+    >
+      <div className="mb-3 flex items-center gap-3 border-b border-white/6 pb-3">
+        <Image
+          src={user.avatar}
+          alt="avatar"
+          width={36}
+          height={36}
+          unoptimized
+          className="rounded-full object-cover"
+        />
+        <div className="min-w-0">
+          <p className="truncate text-sm font-medium text-white">
+            {user.first_name} {user.last_name}
+          </p>
+          <p className="truncate text-xs text-white/30">{user.email}</p>
+        </div>
+      </div>
+
+      <div className="mb-3 flex items-center gap-2">
+        <span
+          className={cn(
+            "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium",
+            isSubscribed
+              ? "border border-emerald-500/20 bg-emerald-500/10 text-emerald-400"
+              : "border border-white/10 bg-white/5 text-white/30",
+          )}
+        >
+          <span
+            className={cn(
+              "h-1.5 w-1.5 rounded-full",
+              isSubscribed ? "bg-emerald-400" : "bg-white/20",
+            )}
+          />
+          {isSubscribed ? "Pro" : "Free plan"}
+        </span>
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <Link
+          href="/settings/cars"
+          onClick={onActionClick}
+          className="cursor-pointer rounded-lg border border-white/10 bg-white/4 px-3 py-1.5 text-center text-xs text-white/60 transition-all hover:border-white/20 hover:bg-white/8 hover:text-white"
+        >
+          Manage cars
+        </Link>
+        <form action={logoutAction}>
+          <button
+            type="submit"
+            className="w-full cursor-pointer rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 transition-all hover:bg-red-500/20 hover:text-red-300"
+          >
+            Sign out
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 
   return (
     <>
@@ -100,69 +167,14 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
 
         <Popover
           containerClassName="z-[60]"
-          isOpen={isPopoverOpen}
+          isOpen={isDesktopPopoverOpen}
           positions={["bottom", "right", "left"]}
           align="end"
-          content={
-            <div className="ml-3 min-w-56 rounded-xl border border-white/10 bg-light-black p-4 shadow-2xl shadow-black/60">
-              <div className="mb-3 flex items-center gap-3 border-b border-white/6 pb-3">
-                <Image
-                  src={user.avatar}
-                  alt="avatar"
-                  width={36}
-                  height={36}
-                  unoptimized
-                  className="rounded-full object-cover"
-                />
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-medium text-white">
-                    {user.first_name} {user.last_name}
-                  </p>
-                  <p className="truncate text-xs text-white/30">{user.email}</p>
-                </div>
-              </div>
-
-              <div className="mb-3 flex items-center gap-2">
-                <span
-                  className={cn(
-                    "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium",
-                    isSubscribed
-                      ? "border border-emerald-500/20 bg-emerald-500/10 text-emerald-400"
-                      : "border border-white/10 bg-white/5 text-white/30",
-                  )}
-                >
-                  <span
-                    className={cn(
-                      "h-1.5 w-1.5 rounded-full",
-                      isSubscribed ? "bg-emerald-400" : "bg-white/20",
-                    )}
-                  />
-                  {isSubscribed ? "Pro" : "Free plan"}
-                </span>
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <Link
-                  href="/settings/cars"
-                  className="cursor-pointer rounded-lg border border-white/10 bg-white/4 px-3 py-1.5 text-center text-xs text-white/60 transition-all hover:border-white/20 hover:bg-white/8 hover:text-white"
-                >
-                  Manage cars
-                </Link>
-                <form action={logoutAction}>
-                  <button
-                    type="submit"
-                    className="w-full cursor-pointer rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 transition-all hover:bg-red-500/20 hover:text-red-300"
-                  >
-                    Sign out
-                  </button>
-                </form>
-              </div>
-            </div>
-          }
-          onClickOutside={() => setIsPopoverOpen(false)}
+          content={popoverContent("ml-3", () => setIsDesktopPopoverOpen(false))}
+          onClickOutside={() => setIsDesktopPopoverOpen(false)}
         >
           <button
-            onClick={() => setIsPopoverOpen((s) => !s)}
+            onClick={() => setIsDesktopPopoverOpen((s) => !s)}
             aria-label="Toggle menu"
             className="relative rounded-full cursor-pointer transition-opacity hover:opacity-80"
           >
@@ -207,23 +219,32 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
           label="Settings"
         />
 
-        <button
-          onClick={() => setIsPopoverOpen((s) => !s)}
-          className="relative"
-          aria-label="Profile"
+        <Popover
+          containerClassName="z-[60]"
+          isOpen={isMobilePopoverOpen}
+          positions={["top", "left", "right"]}
+          align="end"
+          content={popoverContent("mb-3", () => setIsMobilePopoverOpen(false))}
+          onClickOutside={() => setIsMobilePopoverOpen(false)}
         >
-          <Image
-            src={user?.avatar}
-            alt="User avatar"
-            width={32}
-            height={32}
-            unoptimized
-            className="rounded-full object-cover ring-1 ring-white/10"
-          />
-          {isSubscribed && (
-            <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full border-2 border-light-black bg-emerald-400" />
-          )}
-        </button>
+          <button
+            onClick={() => setIsMobilePopoverOpen((s) => !s)}
+            className="relative"
+            aria-label="Profile"
+          >
+            <Image
+              src={user?.avatar}
+              alt="User avatar"
+              width={32}
+              height={32}
+              unoptimized
+              className="rounded-full object-cover ring-1 ring-white/10"
+            />
+            {isSubscribed && (
+              <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full border-2 border-light-black bg-emerald-400" />
+            )}
+          </button>
+        </Popover>
       </nav>
     </>
   );

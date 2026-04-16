@@ -21,7 +21,7 @@ const FREE_FEATURES = [
 const PRO_FEATURES = [
   "Unlimited diagnostics",
   "Multiple vehicles",
-  "GPT-4o powered AI",
+  "GPT-5 powered AI",
   "Full diagnostic history",
   "Priority support",
 ];

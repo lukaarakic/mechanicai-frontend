@@ -12,7 +12,7 @@ const createChatAction = async (carId: string, message: string) => {
       "Content-Type": "application/json",
       Authorization: `${token}`,
     },
-    body: JSON.stringify({ chat: { car_id: carId, message } }),
+    body: JSON.stringify({ chat: { car_id: carId, message, role: "user" } }),
   });
 
   if (!res.ok) {

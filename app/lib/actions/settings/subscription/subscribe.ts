@@ -19,6 +19,7 @@ export async function subscribeAction(): Promise<{ customer_id: string }> {
   );
 
   if (!response.ok) {
+    console.log("Failed to create subscription", await response.json());
     throw new Error("Failed to create subscription");
   }
 

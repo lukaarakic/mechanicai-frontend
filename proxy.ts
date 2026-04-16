@@ -1,7 +1,13 @@
-// middleware.ts (root of project, next to app/)
 import { NextRequest, NextResponse } from "next/server";
 
-const PUBLIC_ROUTES = ["/login", "/register", "/"];
+const PUBLIC_ROUTES = [
+  "/login",
+  "/register",
+  "/forgot-password",
+  "/reset-password",
+  "/verify",
+  "/",
+];
 const AUTH_ROUTES = [
   "/login",
   "/register",

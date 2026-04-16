@@ -24,13 +24,18 @@ const MessageForm = ({
   const handleSubmit = (e: React.FormEvent) => {
     setError(undefined);
     e.preventDefault();
+
     const content = textareaRef.current?.value.trim();
+
     if (!content || isPending) return;
+
     if (content.length < 10) {
       setError("Content must be at least 10 characters.");
       return;
     }
+
     onSend(content);
+
     if (textareaRef.current) textareaRef.current.value = "";
   };
 

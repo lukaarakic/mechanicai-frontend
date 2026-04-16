@@ -18,6 +18,8 @@ export async function getSubscription() {
 
   const data = await res.json();
 
+  console.log("Subscription data:", data);
+
   return res.ok
     ? data
     : {
