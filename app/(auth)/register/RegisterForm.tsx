@@ -41,11 +41,14 @@ const RegisterForm = () => {
             ✓
           </div>
           <p className="text-sm text-emerald-400 font-medium">
-            Account created!
+            {state.pendingVerification
+              ? "Check your email"
+              : "Account created!"}
           </p>
           <p className="text-xs text-white/50">
-            We sent a verification link to {state.email}. Open it to get
-            started.
+            {state.pendingVerification
+              ? `${state.email} is already registered but not verified yet. We sent the verification link again. Open it to get started.`
+              : `We sent a verification link to ${state.email}. Open it to get started.`}
           </p>
           {state.email && <ResendVerification email={state.email} />}
         </div>

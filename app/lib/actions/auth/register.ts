@@ -12,6 +12,8 @@ type RegisterState = {
   } | null;
   success?: boolean;
   email?: string;
+  // The email was already registered but never verified.
+  pendingVerification?: boolean;
 };
 
 export async function registerAction(
@@ -46,6 +48,32 @@ export async function registerAction(
       "password-confirm": parsedData.data.confirmPassword,
     },
   });
+
+  // Signing up again with an unverified email: send a fresh link instead of an
+  // error, so leaving the "check your email" screen doesn't lock people out.
+  // A 400 here means a link was sent in the last few minutes, which is fine.
+  if (res.status === 403 && !res.fieldError) {
+    const resend = await apiFetch("/verify-account-resend", {
+      method: "POST",
+      auth: false,
+      body: { email: parsedData.data.email },
+    });
+
+    if (resend.status === 429 || resend.status >= 500 || resend.status === 0) {
+      return {
+        errors: {
+          general: "Couldn't send a new verification email. Please try again.",
+        },
+      };
+    }
+
+    return {
+      errors: null,
+      success: true,
+      email: parsedData.data.email,
+      pendingVerification: true,
+    };
+  }
 
   if (!res.ok) {
     const [field, message] = res.fieldError ?? [];
