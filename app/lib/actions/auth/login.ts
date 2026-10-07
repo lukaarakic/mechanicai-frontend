@@ -3,13 +3,16 @@
 import { LoginSchema } from "@/app/lib/validations/user-validation";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { apiFetch, AUTH_COOKIE, AUTH_COOKIE_MAX_AGE } from "@/app/lib/api";
 
-type LoginState = {
+export type LoginState = {
   errors: {
     email?: string;
     password?: string;
     general?: string;
   } | null;
+  // Set when the account exists but the email isn't verified yet.
+  unverifiedEmail?: string;
 };
 
 export async function loginAction(
@@ -31,61 +34,48 @@ export async function loginAction(
     };
   }
 
-  let isSuccess = false;
+  const res = await apiFetch("/login", {
+    method: "POST",
+    auth: false,
+    body: {
+      email: parsedData.data.email,
+      password: parsedData.data.password,
+    },
+  });
 
-  try {
-    const response = await fetch(`${process.env.API_URL}/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: parsedData.data.email,
-        password: parsedData.data.password,
-      }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      const [field, message] = errorData["field-error"] || [];
-
+  if (!res.ok) {
+    if (res.status === 403 && res.fieldError?.[0] === "email") {
       return {
-        errors: {
-          email:
-            field === "email"
-              ? "Could not find an account with that email."
-              : undefined,
-          password: field === "password" ? "Invalid password." : undefined,
-          general: errorData.error || "Login failed. Please try again.",
-        },
+        errors: { general: "Please verify your email before logging in." },
+        unverifiedEmail: parsedData.data.email,
       };
     }
 
-    const token = response.headers.get("authorization");
-
-    if (token) {
-      const cookieStore = await cookies();
-
-      cookieStore.set("auth_token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-        maxAge: 60 * 60 * 24,
-      });
-    }
-
-    isSuccess = true;
-  } catch (error) {
-    console.error("Login request failed", error);
+    // Same message for unknown email and wrong password, so the form
+    // doesn't reveal which emails have accounts.
     return {
       errors: {
-        general: "An unexpected error occurred. Please try again.",
+        general:
+          res.status === 401
+            ? "Invalid email or password."
+            : (res.error ?? "Login failed. Please try again."),
       },
     };
   }
 
-  if (isSuccess) redirect("/");
+  const token = res.headers.get("authorization");
+  if (!token) {
+    return { errors: { general: "Login failed. Please try again." } };
+  }
 
-  return { errors: null };
+  const cookieStore = await cookies();
+  cookieStore.set(AUTH_COOKIE, token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: AUTH_COOKIE_MAX_AGE,
+  });
+
+  redirect("/dashboard");
 }

@@ -14,6 +14,7 @@ export type OnboardingData = {
 type OnboardingFields =
   | "first_name"
   | "last_name"
+  | "avatar"
   | "make"
   | "model"
   | "year"

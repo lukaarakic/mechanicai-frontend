@@ -1,11 +1,20 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { SITE_URL } from "./lib/site";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  // Share images come from the opengraph-image.tsx / twitter-image.tsx files
+  // (app/lib/og-card.tsx); this root pair is the fallback for every page.
+  openGraph: {
+    type: "website",
+    siteName: "DashClue",
+  },
+  twitter: { card: "summary_large_image" },
   title: {
-    default: "MechanicAI",
-    template: "%s | MechanicAI",
+    default: "DashClue",
+    template: "%s | DashClue",
   },
   description: "AI car diagnostics and repair guidance assistant.",
   manifest: "/manifest.json",
@@ -18,6 +27,12 @@ export const metadata: Metadata = {
     shortcut: ["/favicon.ico"],
     apple: [{ url: "/apple-icon.png" }],
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#080808",
+  // Lets the mobile nav pad itself for the iPhone home indicator.
+  viewportFit: "cover",
 };
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });

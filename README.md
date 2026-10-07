@@ -1,8 +1,8 @@
 <div align="center">
 
-# 🔧 MechanicAI — Frontend
+# 🔧 DashClue — Frontend
 
-**Next.js frontend for MechanicAI — an AI-powered vehicle diagnostics platform.**
+**Next.js frontend for DashClue — an AI-powered vehicle diagnostics platform.**
 
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -17,7 +17,7 @@
 
 ## ✨ Overview
 
-MechanicAI lets users describe a car problem in plain language and receive a structured, progressive diagnosis through a 4-step AI pipeline. This repo is the Next.js frontend — it handles all UI, auth flows, onboarding, chat, subscription management, and history. The Rails API lives in a separate repo linked above.
+DashClue lets users describe a car problem in plain language and receive a structured, progressive diagnosis through a 4-step AI pipeline. This repo is the Next.js frontend — it handles all UI, auth flows, onboarding, chat, subscription management, and history. The Rails API lives in a separate repo linked above.
 
 ---
 
@@ -82,7 +82,7 @@ Browser
 
 ### Prerequisites
 - Node.js 20+
-- MechanicAI API running locally ([backend repo](https://github.com/lukarakic/mechanicai-api))
+- DashClue API running locally ([backend repo](https://github.com/lukarakic/mechanicai-api))
 
 ### Steps
 
@@ -97,11 +97,16 @@ App runs at `http://localhost:3000`
 
 ### Environment Variables
 
-```env
-API_URL=
-NEXT_PUBLIC_PADDLE_CLIENT_TOKEN=
-NEXT_PUBLIC_PADDLE_PRICE_ID=
-```
+Copy `.env.example` to `.env.local` and fill it in:
+
+| Variable | Purpose |
+|:--|:--|
+| `API_URL` | Rails API base URL incl. `/api/v1` (server-side only) |
+| `INTERNAL_API_SECRET` | Shared with the API so it can rate-limit by the real client IP |
+| `NEXT_PUBLIC_PADDLE_ENV` | `sandbox` or `production` |
+| `NEXT_PUBLIC_PADDLE_CLIENT_TOKEN` | Paddle client-side token |
+| `NEXT_PUBLIC_PADDLE_PRICE_ID` | Paddle price for the Pro plan |
+| `NEXT_PUBLIC_PRO_PRICE_LABEL` | Price shown on the subscription page (e.g. `$7`) |
 
 ---
 

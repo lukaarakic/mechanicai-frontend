@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: "Settings | MechanicAI",
+  title: "Settings",
   description: "Manage your account, cars, and subscription settings.",
 };
 

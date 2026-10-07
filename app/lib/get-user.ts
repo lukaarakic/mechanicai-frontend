@@ -1,25 +1,14 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { cache } from "react";
 import { User } from "../types/user";
+import { apiFetch } from "./api";
 
-export async function getUser(): Promise<User> {
-  const cookieStore = await cookies();
-  const jwtToken = cookieStore.get("auth_token")?.value;
+// Cached per request: the layout, page and actions all ask for the user.
+export const getUser = cache(async (): Promise<User> => {
+  const res = await apiFetch<User>("/current-user");
 
-  if (!jwtToken) {
-    redirect("/login");
+  if (!res.ok || !res.data) {
+    throw new Error(`Failed to load the current user (${res.status})`);
   }
 
-  try {
-    const response = await fetch(`${process.env.API_URL}/current-user`, {
-      method: "GET",
-      headers: { Authorization: `${jwtToken}` },
-    });
-
-    if (!response.ok) redirect("/login");
-
-    return response.json();
-  } catch {
-    redirect("/login");
-  }
-}
+  return res.data;
+});

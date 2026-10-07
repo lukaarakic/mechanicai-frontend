@@ -1,8 +1,7 @@
 "use server";
 
 import { RegisterSchema } from "@/app/lib/validations/user-validation";
-import { flattenZodErrors } from "@/app/utils/flattenZodErrors";
-import z from "zod";
+import { apiFetch } from "@/app/lib/api";
 
 type RegisterState = {
   errors: {
@@ -12,6 +11,7 @@ type RegisterState = {
     general?: string;
   } | null;
   success?: boolean;
+  email?: string;
 };
 
 export async function registerAction(
@@ -37,46 +37,31 @@ export async function registerAction(
     };
   }
 
-  try {
-    const response = await fetch(`${process.env.API_URL}/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: parsedData.data.email,
-        password: parsedData.data.password,
-        "password-confirm": parsedData.data.confirmPassword,
-      }),
-    });
+  const res = await apiFetch("/register", {
+    method: "POST",
+    auth: false,
+    body: {
+      email: parsedData.data.email,
+      password: parsedData.data.password,
+      "password-confirm": parsedData.data.confirmPassword,
+    },
+  });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      const [field, message] = errorData["field-error"] || [];
+  if (!res.ok) {
+    const [field, message] = res.fieldError ?? [];
 
-      return {
-        errors: {
-          email:
-            field === "email"
-              ? "Already an account with that email exists."
-              : undefined,
-          password: field === "password" ? message : undefined,
-          confirmPassword: field === "password-confirm" ? message : undefined,
-          general: errorData.error || "Registration failed. Please try again.",
-        },
-      };
-    }
-
-    return {
-      errors: null,
-      success: true,
-    };
-  } catch (err) {
-    console.error("Registration request failed", err);
     return {
       errors: {
-        general: "An unexpected error occurred. Please try again.",
+        email:
+          field === "email"
+            ? "An account with that email already exists."
+            : undefined,
+        password: field === "password" ? message : undefined,
+        confirmPassword: field === "password-confirm" ? message : undefined,
+        general: res.error ?? "Registration failed. Please try again.",
       },
     };
   }
+
+  return { errors: null, success: true, email: parsedData.data.email };
 }

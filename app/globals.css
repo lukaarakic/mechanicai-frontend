@@ -176,3 +176,60 @@
     height: var(--radix-accordion-content-height);
   }
 }
+
+/* Legal pages (Terms, Privacy, ...) rendered from markdown. */
+@layer components {
+  .legal {
+    color: rgb(241 241 241 / 0.8);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+  }
+  .legal h2 {
+    margin: 2.5rem 0 0.75rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-white);
+  }
+  .legal p,
+  .legal ul,
+  .legal table {
+    margin-bottom: 1rem;
+  }
+  .legal ul {
+    padding-left: 1.25rem;
+    list-style: disc;
+  }
+  .legal li {
+    margin-bottom: 0.375rem;
+  }
+  .legal strong {
+    color: var(--color-white);
+  }
+  .legal a {
+    color: var(--color-white);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .legal table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+  .legal th,
+  .legal td {
+    border: 1px solid rgb(255 255 255 / 0.1);
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  .legal th {
+    color: var(--color-white);
+    background: rgb(255 255 255 / 0.04);
+  }
+}
+
+/* NOTE: the @theme block above redefines some spacing steps as pixel values
+   (e.g. h-10 = 10px, py-20 = 20px, not Tailwind's 40px/80px). New code that
+   expects Tailwind's defaults should use steps not listed there (11, 12, 24…). */

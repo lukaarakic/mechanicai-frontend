@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import RegisterForm from "./RegisterForm";
 
 export const metadata: Metadata = {
-  title: "Register | MechanicAI",
+  title: "Register",
   description:
-    "Create your MechanicAI account to save diagnostics and vehicles.",
+    "Create your DashClue account to save diagnostics and vehicles.",
 };
 
 const RegisterPage = () => {

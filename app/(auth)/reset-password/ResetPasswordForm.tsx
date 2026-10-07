@@ -33,6 +33,8 @@ const ResetPasswordForm = ({ resetKey }: { resetKey: string }) => {
             name="password"
             label="New Password"
             type="password"
+            autoComplete="new-password"
+            required
             placeholder="Enter your new password"
           />
           <FormMessage error={state.errors?.password} />
@@ -44,6 +46,8 @@ const ResetPasswordForm = ({ resetKey }: { resetKey: string }) => {
             type="password"
             name="password-confirm"
             label="Confirm Password"
+            autoComplete="new-password"
+            required
             placeholder="Confirm your new password"
           />
           <FormMessage error={state.errors?.["password-confirm"]} />

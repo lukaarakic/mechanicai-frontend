@@ -1,25 +1,17 @@
 import type { Metadata } from "next";
-import HistoryList from "@/app/components/history/HistoryList";
-import Button from "@/app/components/ui/Button";
-import { getJWT } from "@/app/lib/get-jwt";
+import LockedHistory from "@/app/components/history/LockedHistory";
+import PaginatedHistory from "@/app/components/history/PaginatedHistory";
+import { getChats } from "@/app/lib/actions/chat/get-chats";
 import { getUser } from "@/app/lib/get-user";
-import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "History | MechanicAI",
+  title: "History",
   description: "Browse all of your previous vehicle diagnostics.",
 };
 
 const History = async () => {
-  const token = await getJWT();
   const { subscribed } = await getUser();
-
-  const response = await fetch(`${process.env.API_URL}/chats`, {
-    method: "GET",
-    headers: { Authorization: `${token}` },
-  });
-
-  const chats = response.ok ? await response.json() : [];
+  const chats = subscribed ? await getChats() : [];
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-8">
@@ -39,21 +31,9 @@ const History = async () => {
       </div>
 
       {subscribed ? (
-        <HistoryList solutions={chats} />
+        <PaginatedHistory initialChats={chats} />
       ) : (
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-white/8 bg-white/[0.02] py-20 text-center">
-          <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-2xl">
-            🔍
-          </div>
-          <p className="font-medium text-white/50">Your history is locked</p>
-          <p className="mt-1 text-sm text-white/20 mb-6">
-            Upgrade to Pro to see diagnostics.
-          </p>
-
-          <Button>
-            <Link href="/settings/subscription">Unlock History</Link>
-          </Button>
-        </div>
+        <LockedHistory />
       )}
     </div>
   );

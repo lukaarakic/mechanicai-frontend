@@ -1,30 +1,26 @@
 "use server";
 
-import { getJWT } from "@/app/lib/get-jwt";
+import { apiFetch } from "@/app/lib/api";
 import { getUser } from "@/app/lib/get-user";
 
-export async function getSubscription() {
-  const token = await getJWT();
+export type Subscription = {
+  subscribed: boolean;
+  status?: string;
+  plan?: string;
+  renews_at?: string | null;
+  cancel_at_period_end?: boolean;
+};
+
+export async function getSubscription(): Promise<Subscription> {
   const { id } = await getUser();
 
-  const res = await fetch(
-    `${process.env.API_URL}/accounts/${id}/payment/subscription`,
-    {
-      method: "GET",
-      headers: { Authorization: `${token}` },
-      cache: "no-store",
-    },
+  const res = await apiFetch<Subscription>(
+    `/accounts/${id}/payment/subscription`,
   );
 
-  const data = await res.json();
+  if (!res.ok || !res.data) {
+    throw new Error(`Failed to load subscription (${res.status})`);
+  }
 
-  console.log("Subscription data:", data);
-
-  return res.ok
-    ? data
-    : {
-        subscribed: false,
-        cancel_at_period_end: data.cancel_at_period_end,
-        renews_at: data.renews_at,
-      };
+  return res.data;
 }

@@ -3,8 +3,8 @@ import LoginForm from "./LoginForm";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "Log In | MechanicAI",
-  description: "Access your MechanicAI account and continue diagnosing.",
+  title: "Log In",
+  description: "Access your DashClue account and continue diagnosing.",
 };
 
 const LoginPage = () => {

@@ -25,6 +25,8 @@ const ForgotPasswordForm = () => {
             type="email"
             name="email"
             label="Email"
+            autoComplete="email"
+            required
           />
           <FormMessage error={state.errors.email} />
         </div>
@@ -33,7 +35,7 @@ const ForgotPasswordForm = () => {
         <FormMessage success={state.success} />
 
         <Button className="w-full mt-4" type="submit" disabled={isPending}>
-          Recover password
+          {isPending ? "Sending…" : "Send reset link"}
         </Button>
       </form>
     </>

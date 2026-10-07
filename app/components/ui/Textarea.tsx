@@ -5,19 +5,20 @@ import * as React from "react";
 
 type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 
+const MAX_HEIGHT = 160;
+
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, onChange, ...props }, ref) => {
+  ({ className, ...props }, ref) => {
     const innerRef = React.useRef<HTMLTextAreaElement>(null);
 
-    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    // Grow with the content (also when the value is reset from outside).
+    React.useLayoutEffect(() => {
       const el = innerRef.current;
-      if (el) {
-        el.style.height = "auto";
-        el.style.height = `${Math.min(el.scrollHeight, 160)}px`;
-        el.style.overflowY = el.scrollHeight > 160 ? "auto" : "hidden";
-      }
-      onChange?.(e);
-    };
+      if (!el) return;
+      el.style.height = "auto";
+      el.style.height = `${Math.min(el.scrollHeight, MAX_HEIGHT)}px`;
+      el.style.overflowY = el.scrollHeight > MAX_HEIGHT ? "auto" : "hidden";
+    }, [props.value]);
 
     return (
       <textarea
@@ -27,12 +28,11 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           else if (ref) ref.current = node;
         }}
         rows={1}
-        onChange={handleChange}
         className={cn(
-          `min-h-16 flex w-full rounded-md border border-input resize-none overflow-hidden
-          bg-auto px-3 py-2 text-sm ring-offset-background 
-          placeholder:text-muted-foreground focus-visible:outline-0 focus-visible:ring-0 
-          focus-visible:ring-ring focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50`,
+          "min-h-16 flex w-full resize-none overflow-hidden rounded-xl border border-white/10 bg-white/[0.04] px-3 py-3",
+          "text-base text-white placeholder:text-white/30 outline-none transition-colors sm:text-sm",
+          "focus:border-white/25 focus:bg-white/[0.07]",
+          "disabled:cursor-not-allowed disabled:opacity-50",
           className,
         )}
         {...props}

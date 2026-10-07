@@ -4,3 +4,7 @@ export function randomSeed(): string {
     Math.random().toString(36).substring(2, 15)
   );
 }
+
+export function avatarUrl(seed: string): string {
+  return `https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${seed}`;
+}

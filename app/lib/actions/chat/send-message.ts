@@ -1,66 +1,38 @@
 "use server";
 
-import z from "zod";
-import { getJWT } from "../../get-jwt";
 import { revalidatePath } from "next/cache";
+import { apiFetch } from "@/app/lib/api";
+import { isUuid } from "@/app/lib/is-uuid";
+import { MessageContentSchema } from "@/app/lib/validations/chat-validation";
 import { SendMessageState } from "@/app/types/chat";
 
-const contentSchema = z.object({
-  content: z.string().min(10, "Content must be at least 10 characters."),
-});
-
 const sendMessageAction = async (
-  prevState: SendMessageState,
-  formData: FormData,
-) => {
-  const content = formData.get("content");
-  const chatId = formData.get("chatId");
+  chatId: string,
+  content: string,
+): Promise<SendMessageState> => {
+  if (!isUuid(chatId)) return { error: { general: "Chat not found." } };
 
-  const parsedData = contentSchema.safeParse({ content });
-
-  if (!parsedData.success) {
-    return {
-      data: null,
-      error: {
-        content:
-          parsedData.error.flatten().fieldErrors.content?.[0] ||
-          "Content is required",
-      },
-    };
+  const parsed = MessageContentSchema.safeParse(content);
+  if (!parsed.success) {
+    return { error: { content: parsed.error.issues[0].message } };
   }
 
-  const token = await getJWT();
-
-  const res = await fetch(`${process.env.API_URL}/chats/${chatId}/messages`, {
+  const res = await apiFetch(`/chats/${chatId}/messages`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `${token}`,
-    },
-    body: JSON.stringify({
-      content,
-    }),
+    body: { content: parsed.data },
   });
 
   if (!res.ok) {
-    const errorData = await res.json();
-
     return {
-      data: null,
       error: {
-        general:
-          errorData.message || "Failed to send message. Please try again.",
+        general: res.error ?? "Failed to send message. Please try again.",
       },
+      limitReached: res.status === 403,
     };
   }
 
-  const data = await res.json();
   revalidatePath(`/chat/${chatId}`);
-
-  return {
-    data,
-    error: null,
-  };
+  return { error: null };
 };
 
 export default sendMessageAction;

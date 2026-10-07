@@ -2,24 +2,38 @@
 
 import Button from "@/app/components/ui/Button";
 import Field from "@/app/components/ui/Field";
-import ErrorList from "@/app/components/ui/ErrorList";
 import AuthHeader from "@/app/components/AuthHeader";
 import { registerAction } from "@/app/lib/actions/auth/register";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import FormMessage from "@/app/components/ui/FormMessage";
+import ResendVerification from "../ResendVerification";
+import { usePendingProblem } from "@/app/lib/pending-problem";
 
 const RegisterForm = () => {
   const [state, action, isPending] = useActionState(registerAction, {
     errors: null,
     success: false,
   });
+  const pendingProblem = usePendingProblem();
+  // Controlled so the email survives React's form reset after a failed submit.
+  const [email, setEmail] = useState("");
 
   return (
     <>
       <AuthHeader
         title="Create an account"
-        subtitle="Sync your solutions across all devices with MechanicAI"
+        subtitle="Diagnose car problems in minutes with DashClue"
       />
+
+      {pendingProblem && !state.success && (
+        <div
+          role="status"
+          className="mb-4 rounded-lg border border-blue-400/20 bg-blue-500/10 px-3 py-2.5 text-sm text-blue-200"
+        >
+          We saved your problem. Create a free account and it will be waiting in
+          your first diagnosis.
+        </div>
+      )}
 
       {state.success ? (
         <div className="flex flex-col items-center gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-6 text-center">
@@ -29,9 +43,11 @@ const RegisterForm = () => {
           <p className="text-sm text-emerald-400 font-medium">
             Account created!
           </p>
-          <p className="text-xs text-white/40">
-            Check your email and verify your address to get started.
+          <p className="text-xs text-white/50">
+            We sent a verification link to {state.email}. Open it to get
+            started.
           </p>
+          {state.email && <ResendVerification email={state.email} />}
         </div>
       ) : (
         <form
@@ -44,7 +60,11 @@ const RegisterForm = () => {
               type="email"
               name="email"
               label="Email"
+              autoComplete="email"
               placeholder="yourname@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
             />
             <FormMessage error={state.errors?.email} />
           </div>
@@ -54,7 +74,9 @@ const RegisterForm = () => {
               type="password"
               name="password"
               label="Password"
-              placeholder="Create a password"
+              autoComplete="new-password"
+              placeholder="At least 8 characters"
+              required
             />
             <FormMessage error={state.errors?.password} />
           </div>
@@ -64,7 +86,9 @@ const RegisterForm = () => {
               type="password"
               name="confirmPassword"
               label="Confirm password"
+              autoComplete="new-password"
               placeholder="Repeat your password"
+              required
             />
             <FormMessage error={state.errors?.confirmPassword} />
           </div>

@@ -1,15 +1,27 @@
+import { cn } from "@/app/lib/cn";
+
 type FormMessageProps = {
-  error?: string;
-  success?: string;
+  error?: string | null;
+  success?: string | null;
   className?: string;
+  id?: string;
 };
 
-const FormMessage = ({ error, success, className }: FormMessageProps) => {
+const FormMessage = ({ error, success, className, id }: FormMessageProps) => {
+  const message = error || success;
+  if (!message) return null;
+
   return (
     <p
-      className={`text-sm mt-1 ${error ? "text-red-500" : "text-green-500"} ${className || ""}`}
+      id={id}
+      role={error ? "alert" : "status"}
+      className={cn(
+        "text-sm mt-1",
+        error ? "text-red-400" : "text-emerald-400",
+        className,
+      )}
     >
-      {error ?? success}
+      {message}
     </p>
   );
 };

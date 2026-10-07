@@ -1,17 +1,20 @@
 import type { Metadata } from "next";
 import Section from "../../../components/ui/Section";
 import { getCars } from "@/app/lib/get-cars";
+import { getUser } from "@/app/lib/get-user";
 import { Car } from "@/app/types/car";
 import RemoveCarForm from "./components/RemoveCarForm";
 import AddCar from "./components/AddCar";
+import { ButtonLink } from "@/app/components/ui/Button";
 
 export const metadata: Metadata = {
-  title: "Car Settings | MechanicAI",
+  title: "Car Settings",
   description: "Add, edit, and remove vehicles linked to your account.",
 };
 
 const CarSettings = async () => {
-  const cars = await getCars();
+  const [cars, user] = await Promise.all([getCars(), getUser()]);
+  const canAddCar = user.subscribed || cars.length === 0;
 
   return (
     <div className="flex flex-col">
@@ -24,7 +27,7 @@ const CarSettings = async () => {
 
       <Section
         title="Your vehicles"
-        description="Edit or remove your saved cars."
+        description="Remove cars you no longer drive."
       >
         {cars.length === 0 ? (
           <p className="text-sm text-white/20">No cars added yet.</p>
@@ -39,9 +42,19 @@ const CarSettings = async () => {
 
       <Section
         title="Add a vehicle"
-        description="Add a new car to your account."
+        description={
+          canAddCar
+            ? "Add a new car to your account."
+            : "The free plan includes one car. Upgrade to Pro to add more."
+        }
       >
-        <AddCar />
+        {canAddCar ? (
+          <AddCar />
+        ) : (
+          <ButtonLink href="/settings/subscription" className="w-fit">
+            Upgrade to Pro
+          </ButtonLink>
+        )}
       </Section>
     </div>
   );

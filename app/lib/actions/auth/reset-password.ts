@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { ResetPasswordSchema } from "../../validations/user-validation";
+import { apiFetch } from "@/app/lib/api";
 
 type ResetPasswordState = {
   errors: {
@@ -31,22 +32,24 @@ export async function resetPasswordAction(
     };
   }
 
-  const response = await fetch(`${process.env.API_URL}/reset-password`, {
+  const res = await apiFetch("/reset-password", {
     method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify({ ...parsedData.data, key }),
+    auth: false,
+    body: { ...parsedData.data, key },
   });
 
-  if (!response.ok) {
-    const error = await response.json();
+  if (!res.ok) {
+    const [field, message] = res.fieldError ?? [];
     return {
       errors: {
-        general: error.error || "Failed to reset password",
+        password: field === "password" ? message : undefined,
+        general:
+          field === "password"
+            ? undefined
+            : "This reset link is invalid or has expired. Request a new one.",
       },
     };
   }
 
   redirect("/login?reset=true");
-
-  return { errors: null };
 }

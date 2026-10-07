@@ -1,16 +1,18 @@
 "use server";
 
 import z from "zod";
-import { getJWT } from "../../../get-jwt";
+import { apiFetch } from "@/app/lib/api";
 import { revalidatePath } from "next/cache";
 
 const UpdateUserSchema = z.object({
   first_name: z
     .string()
+    .trim()
     .min(1, "First name is required")
     .max(64, "First name must be less than 64 characters"),
   last_name: z
     .string()
+    .trim()
     .min(1, "Last name is required")
     .max(64, "Last name must be less than 64 characters"),
 });
@@ -32,8 +34,6 @@ export async function updateUserAction(
   prevState: UpdateUserState,
   formData: FormData,
 ): Promise<UpdateUserState> {
-  const token = await getJWT();
-
   const parsedData = UpdateUserSchema.safeParse(
     Object.fromEntries(formData.entries()),
   );
@@ -53,18 +53,18 @@ export async function updateUserAction(
     };
   }
 
-  const res = await fetch(`${process.env.API_URL}/update-user`, {
+  const res = await apiFetch("/update-user", {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `${token}`,
-    },
-    body: JSON.stringify(parsedData.data),
+    body: parsedData.data,
   });
 
   if (!res.ok)
-    return { errors: { general: "Failed to update user" }, success: false };
+    return {
+      errors: { general: res.error ?? "Failed to update profile" },
+      success: false,
+    };
 
-  revalidatePath("/settings/account");
+  // The name also shows in the navbar and on the dashboard.
+  revalidatePath("/", "layout");
   return { errors: {}, success: true };
 }

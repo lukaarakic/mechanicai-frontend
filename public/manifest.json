@@ -1,5 +1,5 @@
 {
-  "name": "MechanicAI",
+  "name": "DashClue",
   "short_name": "MechAI",
   "icons": [
     {
@@ -15,7 +15,7 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
+  "theme_color": "#080808",
+  "background_color": "#080808",
   "display": "standalone"
 }

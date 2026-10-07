@@ -1,7 +1,7 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { ForgotPasswordSchema } from "../../validations/user-validation";
+import { apiFetch } from "@/app/lib/api";
 
 type ForgotPasswordState = {
   errors: {
@@ -20,40 +20,33 @@ export async function forgotPasswordAction(
   );
 
   if (!parsedData.success) {
-    const fieldErrors = parsedData.error.flatten().fieldErrors;
     return {
       errors: {
-        email: fieldErrors.email?.[0],
-        general:
-          parsedData.error.flatten().formErrors?.[0] || "Invalid email address",
+        email:
+          parsedData.error.flatten().fieldErrors.email?.[0] ??
+          "Invalid email address",
       },
     };
   }
 
-  const response = await fetch(
-    `${process.env.API_URL}/reset-password-request`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email: parsedData.data.email }),
-    },
-  );
+  const res = await apiFetch("/reset-password-request", {
+    method: "POST",
+    auth: false,
+    body: { email: parsedData.data.email },
+  });
 
-  if (!response.ok) {
-    const errorData = await response.json();
+  if (res.status === 429 || res.status >= 500 || res.status === 0) {
     return {
       errors: {
-        general:
-          errorData.message ||
-          "An error occurred while requesting password reset",
+        general: res.error ?? "Couldn't send the email. Please try again.",
       },
     };
   }
 
+  // Same answer whether or not the email has an account.
   return {
-    ...prevState,
-    success: "Password reset link sent to your email.",
+    errors: {},
+    success:
+      "If an account exists for that email, we've sent a password reset link.",
   };
 }

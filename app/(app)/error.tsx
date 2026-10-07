@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import Button from "../components/ui/Button";
+import Button, { ButtonLink } from "../components/ui/Button";
 
 export default function Error({
   error,
@@ -15,8 +15,8 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="flex items-center h-dvh justify-center">
-      <div className="flex flex-col items-center gap-6 rounded-2xl px-10 py-8 backdrop-blur-sm">
+    <div className="flex min-h-full items-center justify-center px-4">
+      <div className="flex flex-col items-center gap-6 rounded-2xl px-10 py-8 text-center backdrop-blur-sm">
         <div className="flex flex-col items-center gap-2">
           <h1 className="text-2xl font-semibold text-white">
             Something went wrong
@@ -34,9 +34,12 @@ export default function Error({
 
         <div className="flex items-center gap-3">
           <Button onClick={reset}>Try again</Button>
+          <ButtonLink href="/dashboard" variant="outline">
+            Go home
+          </ButtonLink>
         </div>
 
-        <p className="text-xs text-white/20">MechanicAI · Unexpected error</p>
+        <p className="text-xs text-white/20">DashClue · Unexpected error</p>
       </div>
     </div>
   );

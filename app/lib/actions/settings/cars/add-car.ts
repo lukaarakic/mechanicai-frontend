@@ -1,7 +1,7 @@
 "use server";
 
 import { CarSchema } from "@/app/lib/validations/car-validation";
-import { getJWT } from "@/app/lib/get-jwt";
+import { apiFetch } from "@/app/lib/api";
 import { revalidatePath } from "next/cache";
 import z from "zod";
 
@@ -10,58 +10,50 @@ export type AddCarState = {
     general?: string;
   };
   success: boolean;
+  // Echoed back on error so the form (reset by React after each action) keeps the input.
+  values?: Record<string, string>;
 };
 
 export async function addCarAction(
   prevState: AddCarState,
   formData: FormData,
 ): Promise<AddCarState> {
-  const token = await getJWT();
-
-  const parsedData = CarSchema.safeParse(
-    Object.fromEntries(formData.entries()),
+  const values = Object.fromEntries(
+    ["make", "model", "year", "size", "power"].map((k) => [
+      k,
+      String(formData.get(k) ?? ""),
+    ]),
   );
+  const parsedData = CarSchema.safeParse(values);
 
   if (!parsedData.success) {
-    const fieldErros = parsedData.error.flatten().fieldErrors;
+    const fieldErrors = parsedData.error.flatten().fieldErrors;
     return {
       errors: Object.fromEntries(
-        Object.entries(fieldErros).map(([k, v]) => [
+        Object.entries(fieldErrors).map(([k, v]) => [
           k,
           v?.[0] ?? "Invalid value",
         ]),
       ),
       success: false,
+      values,
     };
   }
 
-  const res = await fetch(`${process.env.API_URL}/cars`, {
+  const res = await apiFetch("/cars", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `${token}`,
-    },
-    body: JSON.stringify({
-      car: {
-        ...parsedData.data,
-      },
-    }),
+    body: { car: parsedData.data },
   });
 
   if (!res.ok) {
-    const error = await res.json();
     return {
-      errors: {
-        general:
-          error["field-error"]?.[1] ?? error["error"] ?? "Failed to add car",
-      },
+      errors: { general: res.error ?? "Failed to add car" },
       success: false,
+      values,
     };
   }
 
   revalidatePath("/settings/cars");
-  return {
-    errors: {},
-    success: true,
-  };
+  revalidatePath("/chat");
+  return { errors: {}, success: true };
 }

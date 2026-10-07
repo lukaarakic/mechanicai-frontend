@@ -14,12 +14,14 @@ const ProfileForm = ({ user }: { user: User }) => {
   });
 
   return (
-    <form action={action} className="grid grid-cols-2 gap-3">
+    <form action={action} className="grid grid-cols-1 gap-3 sm:grid-cols-2">
       <div className="flex flex-col gap-1.5">
         <Field
           name="first_name"
           label="First Name"
-          defaultValue={state.values?.first_name ?? user?.first_name}
+          defaultValue={state.values?.first_name ?? user.first_name ?? ""}
+          autoComplete="given-name"
+          maxLength={64}
           type="text"
         />
         <FormMessage error={state.errors.first_name} />
@@ -28,18 +30,20 @@ const ProfileForm = ({ user }: { user: User }) => {
         <Field
           name="last_name"
           label="Last Name"
-          defaultValue={state.values?.last_name ?? user?.last_name}
+          defaultValue={state.values?.last_name ?? user.last_name ?? ""}
+          autoComplete="family-name"
+          maxLength={64}
           type="text"
         />
         <FormMessage error={state.errors.last_name} />
       </div>
-      <FormMessage className="col-span-2" error={state.errors.general} />
+      <FormMessage className="sm:col-span-2" error={state.errors.general} />
       <FormMessage
-        className="col-span-2"
+        className="sm:col-span-2"
         success={state.success ? "Profile updated successfully!" : undefined}
       />
       <Button className="w-fit" disabled={isPending}>
-        Save changes
+        {isPending ? "Saving..." : "Save changes"}
       </Button>
     </form>
   );

@@ -17,8 +17,8 @@ export default function Error({
   }, [error]);
 
   return (
-    <html>
-      <body>
+    <html lang="en">
+      <body className="bg-black">
         <div className="relative flex min-h-dvh flex-col items-center justify-center gap-6 px-4 py-12">
           <div
             className="pointer-events-none fixed inset-0 opacity-[0.03]"
@@ -54,7 +54,7 @@ export default function Error({
 
                 <div className="flex items-center gap-3">
                   <Link
-                    href="/"
+                    href="/dashboard"
                     className="rounded-xl border border-white/10 bg-white/[0.05] px-5 py-2.5 text-sm font-medium text-white/80 transition hover:bg-white/[0.08] hover:text-white"
                   >
                     Go home

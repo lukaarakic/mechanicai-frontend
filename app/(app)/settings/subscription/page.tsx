@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 import type { Metadata } from "next";
 import SubscribeButton from "./SubscribeButton";
 import CancelButton from "./CancelButton";
@@ -7,27 +6,31 @@ import { cn } from "@/app/lib/cn";
 import { getSubscription } from "@/app/lib/actions/settings/subscription/get-subscription";
 
 export const metadata: Metadata = {
-  title: "Subscription | MechanicAI",
-  description: "Manage your MechanicAI plan and billing details.",
+  title: "Subscription",
+  description: "Manage your DashClue plan and billing details.",
 };
+
+// Display price; keep in sync with the Paddle price (NEXT_PUBLIC_PADDLE_PRICE_ID).
+const PRO_PRICE = process.env.NEXT_PUBLIC_PRO_PRICE_LABEL ?? "$7";
 
 const FREE_FEATURES = [
   "3 diagnostics per month",
+  "6 messages per diagnostic",
   "1 vehicle",
-  "Basic AI model",
+  "Standard AI model",
   "No history access",
 ];
 
 const PRO_FEATURES = [
   "Unlimited diagnostics",
+  "Unlimited follow-up questions",
   "Multiple vehicles",
-  "GPT-5 powered AI",
+  "Our most capable AI model",
   "Full diagnostic history",
-  "Priority support",
 ];
 
 const Check = ({ muted = false }: { muted?: boolean }) => (
-  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
     <path
       d="M2.5 7L5.5 10L11.5 4"
       stroke={muted ? "rgba(255,255,255,0.2)" : "rgb(52,211,153)"}
@@ -77,7 +80,7 @@ const SubscriptionPage = async () => {
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-sm font-medium text-white">
-                  MechanicAI Pro
+                  DashClue Pro
                 </span>
                 <span
                   className={cn(
@@ -90,7 +93,7 @@ const SubscriptionPage = async () => {
                 </span>
               </div>
               <span className="self-start text-sm font-medium text-white sm:self-auto">
-                $7 / month
+                {PRO_PRICE} / month
               </span>
             </div>
             {subscription.renews_at && (
@@ -129,7 +132,7 @@ const SubscriptionPage = async () => {
               {FREE_FEATURES.map((f) => (
                 <li key={f} className="flex items-center gap-2">
                   <Check muted />
-                  <span className="text-xs text-white/30">{f}</span>
+                  <span className="text-xs text-white/40">{f}</span>
                 </li>
               ))}
             </ul>
@@ -161,7 +164,9 @@ const SubscriptionPage = async () => {
                   </span>
                 )}
               </div>
-              <p className="mt-0.5 text-2xl font-semibold text-white">$7</p>
+              <p className="mt-0.5 text-2xl font-semibold text-white">
+                {PRO_PRICE}
+              </p>
               <p className="text-xs text-white/30">per month</p>
             </div>
             <ul className="flex flex-col gap-2">
@@ -196,7 +201,8 @@ const SubscriptionPage = async () => {
                 Cancel subscription
               </p>
               <p className="text-xs text-white/30 mt-0.5">
-                You'll keep Pro access until the end of your billing period.
+                You&apos;ll keep Pro access until the end of your billing
+                period.
               </p>
             </div>
             <CancelButton />

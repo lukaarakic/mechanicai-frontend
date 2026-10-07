@@ -1,52 +1,27 @@
-"use client";
-
-import { FC, useState } from "react";
 import CarIcon from "@/app/assets/icons/car-icon.svg";
-import { differenceInDays, format, isToday, isYesterday } from "date-fns";
+import { format, isThisYear, isToday, isYesterday } from "date-fns";
 import {
   categoryLabels,
   categoryStyles,
-  DiagnosticCategory,
+  isValidCategory,
 } from "@/app/utils/categories";
 import { cn } from "@/app/lib/cn";
 import Link from "next/link";
+import { ChatSummary } from "@/app/types/history";
 
-interface HistoryCardProps {
-  title: string;
-  time: string;
-  id: string;
-  category: string | null;
-  car: {
-    make: string;
-    model: string;
-    year: number;
-    size: number;
-    power: number;
-  };
-}
-
-function getRelativeDateLabel(date: string): string {
+function getDateLabel(date: string): string {
   if (isToday(date)) return format(date, "h:mm a");
   if (isYesterday(date)) return "Yesterday";
-  const daysAgo = differenceInDays(new Date(), date);
-  if (daysAgo <= 7) return "Last 7 days";
-  if (daysAgo <= 30) return "Last 30 days";
-  return "Older";
+  return format(date, isThisYear(date) ? "MMM d" : "MMM d, yyyy");
 }
 
-const HistoryCard: FC<HistoryCardProps> = ({
-  title,
-  time,
-  id,
-  category,
-  car,
-}) => {
-  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+const HistoryCard = ({ chat }: { chat: ChatSummary }) => {
+  const { id, title, created_at, category, car } = chat;
 
   return (
     <Link
       href={`/chat/${id}`}
-      className="relative flex w-full flex-col rounded-2xl border border-white/8 bg-white/2 p-4 transition-all duration-200 hover:border-white/15 hover:bg-white/5"
+      className="relative flex w-full flex-col rounded-2xl border border-white/8 bg-white/2 p-4 transition-all duration-200 hover:border-white/15 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
     >
       <div className="absolute inset-x-0 top-0 h-px rounded-t-2xl bg-linear-to-r from-transparent via-white/10 to-transparent" />
 
@@ -55,64 +30,25 @@ const HistoryCard: FC<HistoryCardProps> = ({
       </p>
 
       <div className="mt-auto flex items-center justify-between gap-3">
-        <div className="relative flex items-center gap-2">
-          <div
-            className="relative"
-            onMouseEnter={() => setIsPopoverOpen(true)}
-            onMouseLeave={() => setIsPopoverOpen(false)}
-          >
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-white/5 transition-colors hover:border-white/20 hover:bg-white/10">
-              <CarIcon className="w-4 fill-white/50" />
-            </div>
-
-            <div
-              className={cn(
-                "absolute bottom-full left-0 z-50 mb-2 min-w-52 rounded-xl border border-white/10 bg-[#111] p-3 shadow-xl shadow-black/40 transition-all duration-150",
-                isPopoverOpen
-                  ? "pointer-events-auto visible translate-y-0 opacity-100"
-                  : "pointer-events-none invisible translate-y-1 opacity-0",
-              )}
-            >
-              {car !== null ? (
-                <div className="flex flex-col gap-1.5">
-                  <p className="mb-1 text-xs font-semibold text-white/30 uppercase tracking-widest">
-                    Vehicle
-                  </p>
-                  {[
-                    ["Brand", car.make],
-                    ["Model", car.model],
-                    ["Year", car.year],
-                    ["Engine", `${car.size}cc`],
-                    ["Power", `${car.power}kW`],
-                  ].map(([label, value]) => (
-                    <div
-                      key={label}
-                      className="flex items-center justify-between gap-4"
-                    >
-                      <span className="text-xs text-white/30">{label}</span>
-                      <span className="text-xs text-white/80">{value}</span>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-xs text-white/30">Vehicle deleted</p>
-              )}
-            </div>
-          </div>
-
-          <span className="text-xs text-white/30">
-            {getRelativeDateLabel(time)}
+        <div className="flex min-w-0 items-center gap-2 text-xs text-white/40">
+          <CarIcon aria-hidden className="w-4 shrink-0 fill-white/40" />
+          <span className="truncate">
+            {car ? `${car.make} ${car.model} · ${car.year}` : "Vehicle removed"}
           </span>
+          <span aria-hidden>·</span>
+          <time dateTime={created_at} className="shrink-0">
+            {getDateLabel(created_at)}
+          </time>
         </div>
 
-        {category && (
+        {category && isValidCategory(category) && (
           <span
             className={cn(
-              "rounded-md px-2 py-0.5 text-xs font-medium",
-              categoryStyles[category as DiagnosticCategory],
+              "shrink-0 rounded-md px-2 py-0.5 text-xs font-medium",
+              categoryStyles[category],
             )}
           >
-            {categoryLabels[category as DiagnosticCategory]}
+            {categoryLabels[category]}
           </span>
         )}
       </div>

@@ -3,11 +3,10 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import z from "zod";
-import { PasswordSchema } from "@/app/lib/validations/user-validation";
-import { getJWT } from "@/app/lib/get-jwt";
+import { apiFetch, AUTH_COOKIE } from "@/app/lib/api";
 
 const DeleteAccountSchema = z.object({
-  password: PasswordSchema,
+  password: z.string().min(1, "Enter your password to confirm"),
 });
 
 export type DeleteAccountState = {
@@ -19,8 +18,6 @@ export async function deleteAccountAction(
   prevState: DeleteAccountState,
   formData: FormData,
 ): Promise<DeleteAccountState> {
-  const token = await getJWT();
-
   const parsed = DeleteAccountSchema.safeParse(Object.fromEntries(formData));
 
   if (!parsed.success) {
@@ -30,27 +27,26 @@ export async function deleteAccountAction(
     };
   }
 
-  const res = await fetch(`${process.env.API_URL}/close-account`, {
+  const res = await apiFetch("/close-account", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `${token}`,
-    },
-    body: JSON.stringify({ password: parsed.data.password }),
+    body: { password: parsed.data.password },
+    // A wrong password is also a 401.
+    signOutOnUnauthorized: false,
   });
 
   if (!res.ok) {
-    const error = await res.json();
+    const [field, message] = res.fieldError ?? [];
+    if (field === "password" && res.status === 401) {
+      return { errors: { password: "Incorrect password." }, success: false };
+    }
     return {
-      errors: {
-        general: error["field-error"]?.[1] ?? "Failed to delete account",
-      },
+      errors: { general: message ?? res.error ?? "Failed to delete account" },
       success: false,
     };
   }
 
   const cookieStore = await cookies();
-  cookieStore.delete("auth_token");
+  cookieStore.delete(AUTH_COOKIE);
 
   redirect("/login");
 }

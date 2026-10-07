@@ -1,15 +1,14 @@
 "use server";
 
 import z from "zod";
-import { revalidatePath } from "next/cache";
 import { PasswordSchema } from "@/app/lib/validations/user-validation";
-import { getJWT } from "@/app/lib/get-jwt";
+import { apiFetch } from "@/app/lib/api";
 
 const UpdatePasswordSchema = z
   .object({
-    password: PasswordSchema,
+    password: z.string().min(1, "Current password is required"),
     "new-password": PasswordSchema,
-    "password-confirm": PasswordSchema,
+    "password-confirm": z.string(),
   })
   .refine((data) => data["new-password"] === data["password-confirm"], {
     path: ["password-confirm"],
@@ -30,8 +29,6 @@ export async function updatePasswordAction(
   prevState: UpdatePasswordState,
   formData: FormData,
 ): Promise<UpdatePasswordState> {
-  const token = await getJWT();
-
   const parsedData = UpdatePasswordSchema.safeParse(
     Object.fromEntries(formData.entries()),
   );
@@ -48,19 +45,29 @@ export async function updatePasswordAction(
     };
   }
 
-  const res = await fetch(`${process.env.API_URL}/change-password`, {
+  const res = await apiFetch("/change-password", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `${token}`,
-    },
-    body: JSON.stringify(parsedData.data),
+    body: parsedData.data,
+    // A wrong current password is also a 401.
+    signOutOnUnauthorized: false,
   });
 
   if (!res.ok) {
-    return { errors: { general: "Failed to update password" }, success: false };
+    const [field, message] = res.fieldError ?? [];
+    if (field === "password") {
+      return {
+        errors: { password: "Current password is incorrect." },
+        success: false,
+      };
+    }
+    if (field === "new-password" || field === "password-confirm") {
+      return { errors: { [field]: message }, success: false };
+    }
+    return {
+      errors: { general: res.error ?? "Failed to update password" },
+      success: false,
+    };
   }
 
-  revalidatePath("/settings/account");
   return { errors: {}, success: true };
 }

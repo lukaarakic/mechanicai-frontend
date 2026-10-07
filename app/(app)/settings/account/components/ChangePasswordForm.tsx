@@ -20,16 +20,18 @@ const ChangePasswordForm = () => {
           label="Current password"
           placeholder="••••••••"
           type="password"
+          autoComplete="current-password"
         />
         <FormMessage error={state.errors.password} />
       </div>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
           <Field
             name="new-password"
             label="New password"
             placeholder="••••••••"
             type="password"
+            autoComplete="new-password"
           />
           <FormMessage error={state.errors["new-password"]} />
         </div>
@@ -39,17 +41,22 @@ const ChangePasswordForm = () => {
             label="Confirm password"
             placeholder="••••••••"
             type="password"
+            autoComplete="new-password"
           />
           <FormMessage error={state.errors["password-confirm"]} />
         </div>
       </div>
       <FormMessage error={state.errors.general} />
       <FormMessage
-        success={state.success ? "Password updated successfully!" : undefined}
+        success={
+          state.success
+            ? "Password updated. You've been signed out on your other devices."
+            : undefined
+        }
       />
 
       <Button className="w-fit" variant="outline" disabled={isPending}>
-        Update password
+        {isPending ? "Updating..." : "Update password"}
       </Button>
     </form>
   );

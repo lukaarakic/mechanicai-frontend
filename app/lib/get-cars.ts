@@ -1,19 +1,10 @@
-"use server";
+import { Car } from "../types/car";
+import { apiFetch } from "./api";
 
-import { getJWT } from "./get-jwt";
+export async function getCars(): Promise<Car[]> {
+  const res = await apiFetch<Car[]>("/cars");
 
-export async function getCars() {
-  const token = await getJWT();
+  if (!res.ok) throw new Error(`Failed to load cars (${res.status})`);
 
-  const res = await fetch(`${process.env.API_URL}/cars`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `${token}`,
-    },
-  });
-
-  const data = await res.json();
-
-  return res.ok ? data : [];
+  return res.data ?? [];
 }

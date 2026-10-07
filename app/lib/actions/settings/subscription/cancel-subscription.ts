@@ -1,24 +1,22 @@
 "use server";
 
-import { getJWT } from "@/app/lib/get-jwt";
+import { apiFetch } from "@/app/lib/api";
 import { getUser } from "@/app/lib/get-user";
 import { revalidatePath } from "next/cache";
 
-export async function cancelSubscriptionAction() {
-  const token = await getJWT();
+export async function cancelSubscriptionAction(): Promise<{
+  error: string | null;
+}> {
   const { id } = await getUser();
 
-  const res = await fetch(
-    `${process.env.API_URL}/accounts/${id}/payment/cancel`,
-    {
-      method: "POST",
-      headers: { Authorization: `${token}` },
-    },
-  );
+  const res = await apiFetch(`/accounts/${id}/payment/cancel`, {
+    method: "POST",
+  });
 
   if (!res.ok) {
-    throw new Error("Failed to cancel subscription");
+    return { error: res.error ?? "Failed to cancel subscription" };
   }
 
   revalidatePath("/settings/subscription");
+  return { error: null };
 }

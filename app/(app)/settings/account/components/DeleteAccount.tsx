@@ -19,7 +19,8 @@ const DeleteAccount = () => {
         <div>
           <p className="text-sm font-medium text-red-400">Delete account</p>
           <p className="text-xs text-white/30 mt-0.5">
-            Permanently delete your account and all data. This cannot be undone.
+            Permanently delete your account, cars and diagnostics. An active
+            subscription is cancelled immediately. This cannot be undone.
           </p>
         </div>
         {!confirmed && (
@@ -40,8 +41,11 @@ const DeleteAccount = () => {
             label="Enter your password to confirm"
             type="password"
             placeholder="••••••••"
+            autoComplete="current-password"
+            autoFocus
           />
           <FormMessage error={state.errors.password} />
+          <FormMessage error={state.errors.general} />
           <div className="flex gap-2">
             <Button variant="destructive" disabled={isPending}>
               {isPending ? "Deleting..." : "Confirm delete"}

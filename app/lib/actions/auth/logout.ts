@@ -2,19 +2,18 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { apiFetch, AUTH_COOKIE } from "@/app/lib/api";
 
 export async function logoutAction() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("auth_token")?.value;
-
-  cookieStore.delete("auth_token");
-  await fetch(`${process.env.API_URL}/logout`, {
+  // Revoke the session on the API first so the token can't be reused.
+  await apiFetch("/logout", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `${token}`,
-    },
+    body: {},
+    signOutOnUnauthorized: false,
   });
+
+  const cookieStore = await cookies();
+  cookieStore.delete(AUTH_COOKIE);
 
   redirect("/login");
 }

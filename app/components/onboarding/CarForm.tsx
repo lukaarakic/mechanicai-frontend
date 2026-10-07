@@ -4,6 +4,10 @@ import { Dispatch, SetStateAction } from "react";
 import Field from "../ui/Field";
 import { OnboardingData, OnboardingErrorState } from "@/app/types/onboarding";
 import FormMessage from "../ui/FormMessage";
+import {
+  CAR_MAX_YEAR,
+  CAR_MIN_YEAR,
+} from "@/app/lib/validations/car-validation";
 
 interface CarFormProps {
   data: OnboardingData;
@@ -16,7 +20,11 @@ const CarForm = ({ data, setData, errors }: CarFormProps) => {
     const { name, value, type } = e.target;
     setData((prev) => ({
       ...prev,
-      car: { ...prev.car, [name]: type === "number" ? +value : value },
+      // Keep "" for an empty number field instead of turning it into 0.
+      car: {
+        ...prev.car,
+        [name]: type === "number" && value !== "" ? Number(value) : value,
+      },
     }));
   };
 
@@ -25,20 +33,24 @@ const CarForm = ({ data, setData, errors }: CarFormProps) => {
       <div className="flex flex-col items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-6">
         <div className="relative">
           <div className="absolute -inset-1 rounded-full bg-linear-to-br from-white/20 to-white/0 blur-sm" />
-          <div className="relative flex h-24 w-24 items-center justify-center rounded-full border border-white/15 bg-white/5 text-4xl">
+          <div
+            aria-hidden
+            className="relative flex h-24 w-24 items-center justify-center rounded-full border border-white/15 bg-white/5 text-4xl"
+          >
             🚗
           </div>
         </div>
         <p className="text-xs text-white/30">Your vehicle</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
           <Field
             name="make"
             type="text"
             label="Make"
             placeholder="Toyota"
+            autoFocus
             value={data.car.make}
             onChange={handleChange}
           />
@@ -65,13 +77,13 @@ const CarForm = ({ data, setData, errors }: CarFormProps) => {
           placeholder="2018"
           value={data.car.year}
           onChange={handleChange}
-          min="1900"
-          max={new Date().getFullYear()}
+          min={CAR_MIN_YEAR}
+          max={CAR_MAX_YEAR}
         />
         <FormMessage error={errors?.year} />
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
           <Field
             name="size"
@@ -80,7 +92,8 @@ const CarForm = ({ data, setData, errors }: CarFormProps) => {
             placeholder="1998"
             value={data.car.size}
             onChange={handleChange}
-            min="0"
+            min="50"
+            max="10000"
           />
           <FormMessage error={errors?.size} />
         </div>
@@ -92,7 +105,8 @@ const CarForm = ({ data, setData, errors }: CarFormProps) => {
             placeholder="150"
             value={data.car.power}
             onChange={handleChange}
-            min="0"
+            min="1"
+            max="2000"
           />
           <FormMessage error={errors?.power} />
         </div>

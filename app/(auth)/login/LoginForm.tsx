@@ -4,18 +4,41 @@ import Button from "@/app/components/ui/Button";
 import Field from "@/app/components/ui/Field";
 import AuthHeader from "@/app/components/AuthHeader";
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { loginAction } from "@/app/lib/actions/auth/login";
+import { loginAction, LoginState } from "@/app/lib/actions/auth/login";
 import FormMessage from "@/app/components/ui/FormMessage";
+import ResendVerification from "../ResendVerification";
+
+const Banner = ({
+  tone,
+  children,
+}: {
+  tone: "success" | "error";
+  children: React.ReactNode;
+}) => (
+  <div
+    role="status"
+    className={
+      tone === "success"
+        ? "mb-4 flex items-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-2.5 text-sm text-emerald-400"
+        : "mb-4 flex items-center gap-2 rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2.5 text-sm text-red-400"
+    }
+  >
+    {children}
+  </div>
+);
 
 const LoginForm = () => {
-  const [state, action, isPending] = useActionState(loginAction, {
-    errors: null,
-  });
+  const [state, action, isPending] = useActionState<LoginState, FormData>(
+    loginAction,
+    { errors: null },
+  );
+  // Controlled so the email survives React's form reset after a failed login.
+  const [email, setEmail] = useState("");
   const searchParams = useSearchParams();
   const verified = searchParams.get("verified");
-  const resetPassword = searchParams.get("reset") === "true";
+  const reset = searchParams.get("reset");
 
   return (
     <>
@@ -24,19 +47,23 @@ const LoginForm = () => {
         subtitle="Log in to your account to continue"
       />
 
-      {verified && (
-        <div className="mb-4 flex items-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-2.5 text-sm text-emerald-400">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-          Email verified successfully!
-        </div>
+      {verified === "true" && (
+        <Banner tone="success">Email verified! You can log in now.</Banner>
       )}
-
-      {resetPassword && (
-        <div className="mb-4 flex items-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-2.5 text-sm text-emerald-400">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shrink-0" />
-          Password reset successfully! You can now log in with your new
-          password.
-        </div>
+      {verified === "invalid" && (
+        <Banner tone="error">
+          That verification link is invalid or expired. Log in to get a new one.
+        </Banner>
+      )}
+      {reset === "true" && (
+        <Banner tone="success">
+          Password reset! Log in with your new password.
+        </Banner>
+      )}
+      {reset === "invalid" && (
+        <Banner tone="error">
+          That reset link is invalid. Request a new one below.
+        </Banner>
       )}
 
       <form
@@ -50,7 +77,11 @@ const LoginForm = () => {
             name="email"
             label="Email"
             type="email"
+            autoComplete="email"
             placeholder="yourname@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
           />
           <FormMessage error={state.errors?.email} />
         </div>
@@ -61,7 +92,9 @@ const LoginForm = () => {
             type="password"
             name="password"
             label="Password"
+            autoComplete="current-password"
             placeholder="Enter your password"
+            required
           />
 
           <FormMessage error={state.errors?.password} />
@@ -69,7 +102,7 @@ const LoginForm = () => {
 
         <Link
           href="/forgot-password"
-          className="text-right text-xs text-white/40 transition-colors hover:text-white/70"
+          className="self-end text-xs text-white/40 transition-colors hover:text-white/70"
         >
           Forgot password?
         </Link>
@@ -80,6 +113,12 @@ const LoginForm = () => {
           {isPending ? "Logging in…" : "Log in"}
         </Button>
       </form>
+
+      {state.unverifiedEmail && (
+        <div className="mt-4">
+          <ResendVerification email={state.unverifiedEmail} />
+        </div>
+      )}
     </>
   );
 };

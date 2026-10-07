@@ -1,6 +1,4 @@
-/* eslint-disable react/no-unescaped-entities */
-import Link from "next/link";
-import Button from "./components/ui/Button";
+import { ButtonLink } from "./components/ui/Button";
 
 export default function NotFound() {
   return (
@@ -26,7 +24,10 @@ export default function NotFound() {
             404
           </span>
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-3xl shadow-lg backdrop-blur-sm">
+            <div
+              aria-hidden
+              className="flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-3xl shadow-lg backdrop-blur-sm"
+            >
               🔧
             </div>
           </div>
@@ -38,17 +39,15 @@ export default function NotFound() {
               Page not found
             </h1>
             <p className="max-w-xs text-sm text-white/40">
-              Looks like this road leads nowhere. The page you're looking for
-              doesn't exist or has been moved.
+              Looks like this road leads nowhere. The page you&apos;re looking
+              for doesn&apos;t exist or has been moved.
             </p>
           </div>
 
-          <Button>
-            <Link href="/">Go home</Link>
-          </Button>
+          <ButtonLink href="/">Go home</ButtonLink>
         </div>
 
-        <p className="text-xs text-white/20">MechanicAI · Error 404</p>
+        <p className="text-xs text-white/20">DashClue · Error 404</p>
       </div>
     </main>
   );

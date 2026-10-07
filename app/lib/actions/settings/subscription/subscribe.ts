@@ -1,28 +1,24 @@
 "use server";
 
-import { getJWT } from "@/app/lib/get-jwt";
+import { apiFetch } from "@/app/lib/api";
 import { getUser } from "@/app/lib/get-user";
 
-export async function subscribeAction(): Promise<{ customer_id: string }> {
+export async function subscribeAction(): Promise<
+  { customerId: string; error: null } | { customerId: null; error: string }
+> {
   const user = await getUser();
-  const token = await getJWT();
 
-  const response = await fetch(
-    `${process.env.API_URL}/accounts/${user.id}/payment/subscribe`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${token}`,
-      },
-    },
+  const res = await apiFetch<{ customer_id: string }>(
+    `/accounts/${user.id}/payment/subscribe`,
+    { method: "POST" },
   );
 
-  if (!response.ok) {
-    console.log("Failed to create subscription", await response.json());
-    throw new Error("Failed to create subscription");
+  if (!res.ok || !res.data?.customer_id) {
+    return {
+      customerId: null,
+      error: res.error ?? "Couldn't start checkout. Please try again.",
+    };
   }
 
-  const data = await response.json();
-  return data;
+  return { customerId: res.data.customer_id, error: null };
 }

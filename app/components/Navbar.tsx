@@ -2,7 +2,6 @@
 
 import { FC, useState } from "react";
 import { Popover } from "react-tiny-popover";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/app/lib/cn";
@@ -14,6 +13,7 @@ import HistoryIcon from "@/app/assets/icons/history-icon.svg";
 import SettingsIcon from "@/app/assets/icons/settings-icon.svg";
 import { User } from "../types/user";
 import { logoutAction } from "@/app/lib/actions/auth/logout";
+import Avatar from "./ui/Avatar";
 
 interface NavbarProps {
   user: User;
@@ -40,7 +40,7 @@ const NavLink = ({
         : "text-white/30 hover:bg-white/5 hover:text-white/70",
     )}
   >
-    <Icon className="h-20 w-20 fill-current" />
+    <Icon className="h-5 w-5 fill-current" />
   </Link>
 );
 
@@ -50,7 +50,6 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
   const pathname = usePathname();
 
   const isActive = (href: string) => {
-    if (href === "/") return pathname === "/";
     return pathname === href || pathname.startsWith(`${href}/`);
   };
 
@@ -67,14 +66,7 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
       )}
     >
       <div className="mb-3 flex items-center gap-3 border-b border-white/6 pb-3">
-        <Image
-          src={user.avatar}
-          alt="avatar"
-          width={36}
-          height={36}
-          unoptimized
-          className="rounded-full object-cover"
-        />
+        <Avatar src={user.avatar} name={user.first_name} size={36} />
         <div className="min-w-0">
           <p className="truncate text-sm font-medium text-white">
             {user.first_name} {user.last_name}
@@ -125,7 +117,11 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
   return (
     <>
       <nav className="py-20 fixed left-0 top-0 z-50 hidden h-dvh w-16 flex-col items-center gap-1 border-r border-white/6 bg-light-black md:flex">
-        <Link href="/" className="mb-4 flex items-center justify-center">
+        <Link
+          href="/dashboard"
+          aria-label="DashClue home"
+          className="mb-4 flex items-center justify-center"
+        >
           <WhiteLogo className="h-7 w-7" />
         </Link>
 
@@ -141,14 +137,14 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
               : "border border-white/10 bg-white/4 text-white/50 hover:border-white/20 hover:bg-white/8 hover:text-white",
           )}
         >
-          <NewChatIcon className="h-20 w-20 fill-current" />
+          <NewChatIcon className="h-5 w-5 fill-current" />
         </Link>
 
         <div className="flex flex-1 flex-col gap-1">
           <NavLink
-            href="/"
+            href="/dashboard"
             icon={HomeIcon}
-            active={isActive("/")}
+            active={isActive("/dashboard")}
             label="Home"
           />
           <NavLink
@@ -175,16 +171,15 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
         >
           <button
             onClick={() => setIsDesktopPopoverOpen((s) => !s)}
-            aria-label="Toggle menu"
+            aria-label="Account menu"
+            aria-expanded={isDesktopPopoverOpen}
             className="relative rounded-full cursor-pointer transition-opacity hover:opacity-80"
           >
-            <Image
+            <Avatar
               src={user.avatar}
-              alt="User avatar"
-              width={36}
-              height={36}
-              unoptimized
-              className="rounded-full object-cover ring-1 ring-white/10"
+              name={user.first_name}
+              size={36}
+              className="ring-1 ring-white/10"
             />
             {isSubscribed && (
               <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full border-2 border-light-black bg-emerald-400" />
@@ -195,8 +190,13 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
 
       {/* MOBILE NAVIGATION */}
 
-      <nav className="fixed bottom-0 left-0 z-50 flex w-full items-center justify-around border-t border-white/6 bg-light-black/90 px-4 py-3 backdrop-blur-md md:hidden">
-        <NavLink href="/" icon={HomeIcon} active={isActive("/")} label="Home" />
+      <nav className="order-last flex w-full shrink-0 items-center justify-around border-t border-white/6 bg-light-black px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] md:hidden">
+        <NavLink
+          href="/dashboard"
+          icon={HomeIcon}
+          active={isActive("/dashboard")}
+          label="Home"
+        />
         <NavLink
           href="/history"
           icon={HistoryIcon}
@@ -230,15 +230,14 @@ const Navbar: FC<NavbarProps> = ({ user }) => {
           <button
             onClick={() => setIsMobilePopoverOpen((s) => !s)}
             className="relative"
-            aria-label="Profile"
+            aria-label="Account menu"
+            aria-expanded={isMobilePopoverOpen}
           >
-            <Image
-              src={user?.avatar}
-              alt="User avatar"
-              width={32}
-              height={32}
-              unoptimized
-              className="rounded-full object-cover ring-1 ring-white/10"
+            <Avatar
+              src={user.avatar}
+              name={user.first_name}
+              size={32}
+              className="ring-1 ring-white/10"
             />
             {isSubscribed && (
               <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full border-2 border-light-black bg-emerald-400" />

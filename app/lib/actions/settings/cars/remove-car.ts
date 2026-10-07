@@ -1,22 +1,21 @@
 "use server";
 
-import { getJWT } from "@/app/lib/get-jwt";
+import { apiFetch } from "@/app/lib/api";
+import { isUuid } from "@/app/lib/is-uuid";
 import { revalidatePath } from "next/cache";
 
-export async function removeCarAction(carId: string) {
-  const token = await getJWT();
+export async function removeCarAction(
+  carId: string,
+): Promise<{ error: string | null }> {
+  if (!isUuid(carId)) return { error: "Car not found." };
 
-  const res = await fetch(`${process.env.API_URL}/cars/${carId}`, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `${token}`,
-    },
-  });
+  const res = await apiFetch(`/cars/${carId}`, { method: "DELETE" });
 
   if (!res.ok) {
-    throw new Error("Failed to remove car");
+    return { error: res.error ?? "Failed to remove car. Please try again." };
   }
 
   revalidatePath("/settings/cars");
+  revalidatePath("/chat");
+  return { error: null };
 }
