@@ -22,15 +22,18 @@ const EXAMPLES = [
 const ProblemInput = ({
   className,
   inputId,
+  defaultText = "",
 }: {
   className?: string;
   inputId?: string;
+  // Pre-fills the box, e.g. with the code a reference page is about.
+  defaultText?: string;
 }) => {
   const router = useRouter();
   const generatedId = useId();
   const id = inputId ?? generatedId;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [text, setText] = useState("");
+  const [text, setText] = useState(defaultText);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 

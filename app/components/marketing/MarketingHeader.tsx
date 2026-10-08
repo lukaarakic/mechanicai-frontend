@@ -4,6 +4,7 @@ import { ButtonLink } from "../ui/Button";
 
 const NAV = [
   { href: "/#how-it-works", label: "How it works" },
+  { href: "/codes", label: "OBD2 codes" },
   { href: "/#pricing", label: "Pricing" },
   { href: "/#faq", label: "FAQ" },
 ];

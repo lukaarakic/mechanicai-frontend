@@ -8,15 +8,10 @@ const AUTH_ROUTES = [
   "/reset-password",
   "/verify",
 ];
-// Public pages anyone can read, signed in or not.
-const OPEN_ROUTES = [
-  "/api/auth/clear",
-  "/terms",
-  "/privacy",
-  "/refund-policy",
-  "/cookie-policy",
-  "/blog",
-];
+// The app itself, for signed-in users only. Every other path is public, and
+// one that doesn't exist gets the 404 page rather than a login redirect, so
+// search engines don't see missing pages as a login page.
+const APP_ROUTES = ["/dashboard", "/chat", "/history", "/settings"];
 
 const routeMatches = (pathname: string, route: string) =>
   pathname === route || pathname.startsWith(route + "/");
@@ -27,8 +22,11 @@ export default function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get("auth_token")?.value;
 
-  if (OPEN_ROUTES.some((route) => routeMatches(pathname, route))) {
-    return NextResponse.next();
+  // Code pages live at lowercase URLs; /codes/P0420 is how people type it.
+  if (/^\/codes\/[^/]*[A-Z]/.test(pathname)) {
+    const url = request.nextUrl.clone();
+    url.pathname = pathname.toLowerCase();
+    return NextResponse.redirect(url, 308);
   }
 
   // The landing page; signed-in users go straight to their dashboard.
@@ -46,7 +44,9 @@ export default function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  if (!token && !isAuthRoute) {
+  const isAppRoute = APP_ROUTES.some((route) => routeMatches(pathname, route));
+
+  if (!token && isAppRoute) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 

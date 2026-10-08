@@ -17,7 +17,8 @@ import SampleDiagnosis from "../components/landing/SampleDiagnosis";
 import ProblemGrid from "../components/landing/ProblemGrid";
 import MobileStickyCta from "../components/landing/MobileStickyCta";
 import { ButtonLink } from "../components/ui/Button";
-import { PRO_PRICE, SITE_URL } from "../lib/site";
+import JsonLd, { faqPage } from "../components/marketing/JsonLd";
+import { CONTACT_EMAIL, PRO_PRICE, SITE_URL } from "../lib/site";
 
 const DESCRIPTION =
   "Describe your car problem, answer a few quick questions, and see what's likely wrong, how serious it is, and what it should cost to fix. Free to start.";
@@ -139,7 +140,7 @@ const FAQ = [
   },
 ];
 
-const jsonLd = {
+const appJsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   name: "DashClue",
@@ -158,6 +159,17 @@ const jsonLd = {
   ],
 };
 
+// Tells search engines and AI assistants who is behind the site.
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "DashClue",
+  url: SITE_URL,
+  logo: `${SITE_URL}/web-app-manifest-512x512.png`,
+  email: CONTACT_EMAIL,
+  description: "AI car diagnosis for drivers: likely causes, safety and repair costs.",
+};
+
 const Eyebrow = ({ children }: { children: React.ReactNode }) => (
   <p className="mb-3 text-xs font-semibold tracking-widest text-blue-300 uppercase">
     {children}
@@ -166,10 +178,12 @@ const Eyebrow = ({ children }: { children: React.ReactNode }) => (
 
 const Landing = () => (
   <>
-    <script
-      type="application/ld+json"
-      // Static content defined above, not user input.
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    <JsonLd
+      data={[
+        appJsonLd,
+        organizationJsonLd,
+        faqPage(FAQ.map(({ q, a }) => ({ question: q, answer: a }))),
+      ]}
     />
 
     {/* Hero */}

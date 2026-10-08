@@ -3,6 +3,8 @@ import WhiteLogo from "@/app/assets/logo-white.svg";
 import { CONTACT_EMAIL } from "@/app/lib/site";
 
 const LINKS = [
+  { href: "/codes", label: "OBD2 codes" },
+  { href: "/problems", label: "Car problems" },
   { href: "/blog", label: "Blog" },
   { href: "/terms", label: "Terms" },
   { href: "/privacy", label: "Privacy" },
